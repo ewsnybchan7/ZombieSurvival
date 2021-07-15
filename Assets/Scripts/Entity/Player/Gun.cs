@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : BaseEntity
+public class Gun : BaseEntity, IShotable
 {
     public bool IsFired { get; private set; }
     public int MaxAmmo { get; protected set; }
@@ -20,6 +20,10 @@ public class Gun : BaseEntity
     public ParticleSystem m_MuzzleParticle;
     public ParticleSystem m_ShellEjectParticle;
 
+    private LineRenderer m_LineRenderer;
+
+    private Vector3[] m_Points;
+
     void GunSetUp()
     {
         IsFired = false;
@@ -28,6 +32,11 @@ public class Gun : BaseEntity
         FireRate = 0.2f;
 
         this.transform.localPosition = new Vector3(-0.2f, -0.04f, 0.17f);
+
+        m_LineRenderer = GetComponent<LineRenderer>();
+        m_LineRenderer.positionCount = 2;
+        m_Points = new Vector3[2];
+        m_Points[0] = FireTransform.position;
     }
 
 
@@ -38,9 +47,18 @@ public class Gun : BaseEntity
         base.Start();
     }
 
-    public void Fire()
+    public void Fire(Vector3 dir)
     {
+        m_Points[0] = FireTransform.position;
+        m_Points[1] = Vector3.MoveTowards(FireTransform.position, dir * 10f, 10f);
+        m_LineRenderer.SetPositions(m_Points);
+
+        m_LineRenderer.enabled = true;
+
+        // 파티클 시작
         m_MuzzleParticle.Play();
         m_ShellEjectParticle.Play();
+
+        
     }
 }

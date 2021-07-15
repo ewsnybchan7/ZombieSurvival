@@ -44,6 +44,11 @@ public partial class PlayerEntity : BattleEntity
         m_Animator.SetFloat("MoveY", Input.GetAxis("Horizontal"));
     }
 
+    protected override void Update()
+    {
+        Attack();
+    }
+
     private void OnDisable()
     {
         m_Gun.gameObject.SetActive(false);

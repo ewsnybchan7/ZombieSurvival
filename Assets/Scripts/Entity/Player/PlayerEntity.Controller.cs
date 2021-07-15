@@ -15,6 +15,8 @@ public partial class PlayerEntity : BattleEntity
     public string m_FireButton = "";
     public string m_ReloadButton = "";
 
+    private Vector3 mouseDir; 
+
     void Rotate()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -24,8 +26,8 @@ public partial class PlayerEntity : BattleEntity
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             Vector3 targetPos = new Vector3(hit.point.x - transform.position.x, 0f, hit.point.z - transform.position.z);
-            dir = targetPos.normalized;
-            this.transform.forward = dir;
+            mouseDir = targetPos.normalized;
+            this.transform.forward = mouseDir;
         }
     }
 
@@ -42,9 +44,9 @@ public partial class PlayerEntity : BattleEntity
 
     void Attack()
     {
-        //if (Input.GetMouseButton(0))
-        //{
-        //    m_Gun.Fire();
-        //}
+        if (Input.GetMouseButton(0))
+        {
+            m_Gun.Fire(mouseDir);
+        }
     }
 }
