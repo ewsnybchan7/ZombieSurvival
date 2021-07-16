@@ -4,10 +4,6 @@ using UnityEngine;
 
 public partial class PlayerEntity : BattleEntity
 {
-    private Rigidbody m_Rigidbody;
-
-    private Animator m_Animator;
-
     public Gun m_Gun;
     public Transform gunTransform; // 총 배치의 기준점
     private Transform leftHandMount; // 왼손이 위치할 지점
@@ -16,8 +12,7 @@ public partial class PlayerEntity : BattleEntity
     public ItemEntity EquipItem;
 
     private float m_PlayerDamage = 50.0f;
-
-    public bool IsReload { get; private set; }
+    private const float PLAYER_MAX_HP = 100f;
 
     private void OnEnable()
     {
@@ -42,10 +37,8 @@ public partial class PlayerEntity : BattleEntity
         // animator 설정 x축 y축 값을 설정하는 좋은 방법
         m_Animator.SetFloat("MoveX", Input.GetAxis("Vertical"));
         m_Animator.SetFloat("MoveY", Input.GetAxis("Horizontal"));
-    }
 
-    protected override void Update()
-    {
+
         Attack();
     }
 
@@ -54,11 +47,10 @@ public partial class PlayerEntity : BattleEntity
         m_Gun.gameObject.SetActive(false);
     }
 
-    public void PlayerSetUp()
+    private void PlayerSetUp()
     {
-        m_Rigidbody = GetComponent<Rigidbody>();
-        m_Animator = GetComponent<Animator>();
-
+        MaxHp = PLAYER_MAX_HP;
+        CurrentHp = PLAYER_MAX_HP;
         Damage = m_PlayerDamage;
 
         leftHandMount = m_Gun.leftHandMount;

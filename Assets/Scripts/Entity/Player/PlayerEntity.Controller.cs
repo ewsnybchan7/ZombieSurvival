@@ -6,7 +6,7 @@ using UnityEngine;
 
 public partial class PlayerEntity : BattleEntity
 {
-    public float Speed_Move = 7.0f;
+    public float Speed_Move = 5.0f;
     public float Speed_Rotate = 180.0f;
 
     public string m_MovementAxisX = "Vertical";
@@ -15,11 +15,14 @@ public partial class PlayerEntity : BattleEntity
     public string m_FireButton = "";
     public string m_ReloadButton = "";
 
+    public string m_UseItemButton = "";
+
     private Vector3 mouseDir; 
 
     void Rotate()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
         RaycastHit hit;
         Vector3 dir = Vector3.zero;
 
@@ -46,7 +49,25 @@ public partial class PlayerEntity : BattleEntity
     {
         if (Input.GetMouseButton(0))
         {
-            m_Gun.Fire(mouseDir);
+            if(m_Gun.m_FireState == Gun.FireState.Ready)
+            {
+                m_Gun.Fire();
+            }
+            else if(m_Gun.m_FireState == Gun.FireState.Empty)
+            {
+                m_Gun.Reload();
+                m_Animator.SetTrigger("Reload");
+            }
         }
+        else if(Input.GetKeyDown(KeyCode.R))
+        {
+            m_Gun.Reload();
+            m_Animator.SetTrigger("Reload");
+        }
+    }
+
+    void UseItem()
+    {
+
     }
 }

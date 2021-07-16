@@ -2,5 +2,5 @@
 
 public interface IShotable
 {
-    public void Fire(Vector3 dir);
+    public void Fire();
 }
