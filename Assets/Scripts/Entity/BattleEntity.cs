@@ -2,13 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BattleEntity : BaseEntity, IDamageable
 {
+    protected StateControl m_StateControl;
+
+    public float MovingSpeed { get; set; }
+    public float AttackRange { get; set; }
+    public float SearchRange { get; set; }
+
     public float MaxHp { get; protected set; } // 최대 체력
     public float CurrentHp { get; protected set; } // 현재 체력
     public float Damage { get; protected set; }
     public bool Dead => CurrentHp <= 0; // 죽음 여부
+    
     public event Action OnDeath; // 죽음 이벤트
 
     protected Rigidbody m_Rigidbody;

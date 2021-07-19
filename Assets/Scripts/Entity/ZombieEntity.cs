@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; 
 
 public partial class ZombieEntity : BattleEntity
 {
@@ -31,7 +31,20 @@ public partial class ZombieEntity : BattleEntity
     // Update is called once per frame
     protected override void FixedUpdate()
     {
-        Patrol();
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            m_StateControl.ChangeState(StateControl.BATTLE_STATE.IDLE);
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            m_StateControl.ChangeState(StateControl.BATTLE_STATE.SEARCH);
+        }
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            m_StateControl.ChangeState(StateControl.BATTLE_STATE.ATTACK);
+        }
+
+        //Patrol();
     }
 
     private void ZombieSetUp()
@@ -44,13 +57,13 @@ public partial class ZombieEntity : BattleEntity
 
         m_NavMeshAgent = GetComponent<NavMeshAgent>();
 
-        state = AttackState.Find;
+        state = AttackState.Idle;
     }
 
     private void ZombieDeath()
     {
         m_Animator.SetBool("Chase", false);
-        m_Animator.SetBool("Die", true);
+        m_Animator.SetTrigger("Die");
 
         m_NavMeshAgent.enabled = false;
         m_Rigidbody.velocity = Vector3.zero;

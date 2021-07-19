@@ -7,6 +7,10 @@ public class UIManager : Singleton<UIManager>
 {
     PlayerEntity MainPlayer;
 
+    public delegate void UpdateUI();
+    public UpdateUI UpdateStatusFunc;
+
+
     public GameObject GameUICanvas;
 
     public GameObject m_PlayerStatus;
@@ -20,8 +24,6 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject m_MenuUI;
 
-    //public delegate void UIUpdateOp();
-    //public event UIUpdateOp UpdateOperation;
 
     public void UpdateHpText(float currentHP, float maxHP)
     {
