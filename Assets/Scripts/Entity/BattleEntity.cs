@@ -14,6 +14,9 @@ public class BattleEntity : BaseEntity, IDamageable
     protected Rigidbody m_Rigidbody;
     protected Animator m_Animator;
 
+    protected delegate void OnDamagedOp();
+    protected event OnDamagedOp OnDamagedOperation;
+
     protected override void Start()
     {
         SetUpOperation += BattleSetUp;
@@ -28,6 +31,10 @@ public class BattleEntity : BaseEntity, IDamageable
         if(Dead)
         {
             OnDeath?.Invoke();
+        }
+        else
+        {
+            OnDamagedOperation?.Invoke();
         }
     }
 

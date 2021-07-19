@@ -49,7 +49,7 @@ public class Gun : BaseEntity, IShotable
         ReloadTime = 1.4f;
         FireDistance = 50f;
         LastFireTime = .0f;
-        Damage = 100f;
+        Damage = 25f;
 
         this.transform.localPosition = new Vector3(-0.2f, -0.04f, 0.17f);
 
@@ -79,6 +79,9 @@ public class Gun : BaseEntity, IShotable
 
             FireOperation?.Invoke();
         }
+
+        // юс╫ц
+        UIManager.Instance.UpdateAmmoText(CurAmmo, MaxAmmo);
     }
 
     

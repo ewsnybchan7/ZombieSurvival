@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class ZombieEntity : BattleEntity
 {
@@ -14,11 +15,14 @@ public partial class ZombieEntity : BattleEntity
 
     public List<Transform> PatrolPoints;
 
+    public Image HPImage;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         SetUpOperation += ZombieSetUp;
         OnDeath += ZombieDeath;
+        OnDamagedOperation += ZombieOnDamaged;
         PatrolDistance = 5f;
 
         base.Start();
@@ -30,12 +34,13 @@ public partial class ZombieEntity : BattleEntity
         Patrol();
     }
 
-
     private void ZombieSetUp()
     {
         MaxHp = ZOMBIE_MAX_HP;
         CurrentHp = ZOMBIE_MAX_HP;
         Damage = m_ZombieDamage;
+
+        PatrolSpeed = 0.5f;
 
         m_NavMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -45,11 +50,18 @@ public partial class ZombieEntity : BattleEntity
     private void ZombieDeath()
     {
         m_Animator.SetBool("Chase", false);
-        m_Animator.SetTrigger("Die");
+        m_Animator.SetBool("Die", true);
 
         m_NavMeshAgent.enabled = false;
+        m_Rigidbody.velocity = Vector3.zero;
+        m_Rigidbody.angularVelocity = Vector3.zero;
 
         StartCoroutine(Death());
+    }
+
+    private void ZombieOnDamaged()
+    {
+        HPImage.fillAmount = CurrentHp / MaxHp;
     }
 
     private IEnumerator Death()

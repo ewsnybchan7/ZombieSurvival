@@ -11,7 +11,6 @@ public partial class PlayerEntity : BattleEntity
 
     public ItemEntity EquipItem;
 
-    private float m_PlayerDamage = 50.0f;
     private const float PLAYER_MAX_HP = 100f;
 
     private void OnEnable()
@@ -24,6 +23,7 @@ public partial class PlayerEntity : BattleEntity
     {
         SetUpOperation += PlayerSetUp;
         OnDeath += PlayerDeath;
+        OnDamagedOperation += PlayerOnDamaged;
 
         base.Start();
     }
@@ -38,7 +38,6 @@ public partial class PlayerEntity : BattleEntity
         m_Animator.SetFloat("MoveX", Input.GetAxis("Vertical"));
         m_Animator.SetFloat("MoveY", Input.GetAxis("Horizontal"));
 
-
         Attack();
     }
 
@@ -51,10 +50,18 @@ public partial class PlayerEntity : BattleEntity
     {
         MaxHp = PLAYER_MAX_HP;
         CurrentHp = PLAYER_MAX_HP;
-        Damage = m_PlayerDamage;
 
         leftHandMount = m_Gun.leftHandMount;
         rightHandMount = m_Gun.rightHandMount;
+    }
+
+    private void PlayerOnDamaged()
+    {
+        UIManager.Instance.UpdateHpText(CurrentHp, MaxHp);
+
+        // Damage를 입었다는 클릭커 깜빡깜빡 효과 추가
+        // World canvas를 둬서 숫자 데미지 효과
+        // 블러드 파티클 정도?
     }
 
     public void PlayerDeath()

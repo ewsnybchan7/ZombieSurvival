@@ -20,10 +20,25 @@ public partial class ZombieEntity : BattleEntity
     private PlayerEntity player;
     private int currentPointIndex;
 
-    void Attack()
+
+    private Coroutine PatrolCoroutine = null;
+    private bool IsPatrolRoutineEnd = false;
+
+    public float PatrolSpeed { get; protected set; }
+
+    private void OnTriggerEnter(Collider other)
     {
-        //PlayerEntity playerEntity = player[0].GetComponent<PlayerEntity>();
-        //playerEntity.OnDamaged()
+        if(other.tag == "Player")
+        {
+            Debug.Log("fewa");
+            IDamageable target = other.GetComponent<IDamageable>();
+            Attack(target);
+        }
+    }
+
+    void Attack(IDamageable player)
+    {
+        player.OnDamaged(Damage);
     }
 
     void Patrol()
@@ -37,6 +52,10 @@ public partial class ZombieEntity : BattleEntity
             state = AttackState.Chase;
             player = overlapedPlayer[0].GetComponent<PlayerEntity>();
             Chase = true;
+            m_NavMeshAgent.speed = 1.5f;
+
+            m_Animator.SetBool("Find", false);
+            m_Animator.SetBool("Chase", true);
 
             m_NavMeshAgent.SetDestination(player.transform.position);
         }
@@ -47,7 +66,19 @@ public partial class ZombieEntity : BattleEntity
 
             if (state == AttackState.Chase || state == AttackState.Goal || state == AttackState.Find)
             {
-                StartCoroutine(FindPatrolPoint());
+                if(PatrolCoroutine == null)
+                {
+                    PatrolCoroutine = StartCoroutine(FindPatrolPoint());
+                    IsPatrolRoutineEnd = false;
+                }
+                else
+                {
+                    if(IsPatrolRoutineEnd)
+                    {
+                        StopCoroutine(PatrolCoroutine);
+                        PatrolCoroutine = null;
+                    }
+                }
             }
             else
             {
@@ -64,19 +95,23 @@ public partial class ZombieEntity : BattleEntity
 
     private IEnumerator FindPatrolPoint()
     {
-        state = AttackState.Find;
         m_Animator.SetBool("Chase", false);
+        m_Animator.SetBool("Find", true);
+
+        state = AttackState.Find;
         m_NavMeshAgent.enabled = false;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         state = AttackState.Patrol;
-        m_Animator.SetBool("Chase", true);
+        m_Animator.SetBool("Find", false);
 
         m_NavMeshAgent.enabled = true;
+        m_NavMeshAgent.speed = PatrolSpeed;
         m_NavMeshAgent.ResetPath();
 
         currentPointIndex = Random.Range(0, PatrolPoints.Count);
         m_NavMeshAgent.SetDestination(PatrolPoints[currentPointIndex].transform.position);
+        IsPatrolRoutineEnd = true;
     }
 }

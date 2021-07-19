@@ -1,18 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Singleton : MonoBehaviour
+
+public class Singleton<Class> : MonoBehaviour where Class : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private bool _persistent = true;
+
+    protected delegate void AwakeOp();
+    protected event AwakeOp AwakeOperation;
+
+    public static Class Instance
     {
-        
+        get
+        {
+            if (m_Instance == null)
+                m_Instance = FindObjectOfType<Class>();
+
+            return m_Instance;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    static Class m_Instance;
+
+    private void Awake()
     {
-        
+        if (_persistent)
+            DontDestroyOnLoad(gameObject);
+
+        AwakeOperation?.Invoke();
     }
 }
