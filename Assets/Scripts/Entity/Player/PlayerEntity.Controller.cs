@@ -26,7 +26,8 @@ public partial class PlayerEntity : BattleEntity
         RaycastHit hit;
         Vector3 dir = Vector3.zero;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        int layerMask = 1 << LayerMask.NameToLayer("Ground");
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
             Vector3 targetPos = new Vector3(hit.point.x - transform.position.x, 0f, hit.point.z - transform.position.z);
             mouseDir = targetPos.normalized;
@@ -45,7 +46,7 @@ public partial class PlayerEntity : BattleEntity
         m_Rigidbody.MovePosition(this.transform.position + movement);
     }
 
-    void Attack()
+    private void PlayerAttack()
     {
         if (Input.GetMouseButton(0))
         {

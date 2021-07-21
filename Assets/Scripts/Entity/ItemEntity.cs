@@ -13,8 +13,6 @@ public class ItemEntity : BaseEntity, IItem
     protected override void Start()
     {
         SetUpOperation += ItemSetUpOp;
-
-        base.Start();
     }
 
     private void ItemSetUpOp()

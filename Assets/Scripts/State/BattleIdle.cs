@@ -27,6 +27,11 @@ public class BattleIdle : State
     {
         base.Update();
 
+        if (ownerEntity.Dead)
+        {
+            StateChange(StateControl.BATTLE_STATE.END);
+        }
+
         if (ownerEntity.EntityType == EntityManager.EntityType.Zombie)
         {
             Timer += Time.deltaTime;

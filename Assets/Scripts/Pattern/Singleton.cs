@@ -4,7 +4,7 @@ using UnityEngine;
 public class Singleton<Class> : MonoBehaviour where Class : MonoBehaviour
 {
     [SerializeField]
-    private bool _persistent = true;
+    protected bool _persistent = true;
 
     protected delegate void AwakeOp();
     protected event AwakeOp AwakeOperation;
@@ -22,7 +22,7 @@ public class Singleton<Class> : MonoBehaviour where Class : MonoBehaviour
 
     static Class m_Instance;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (_persistent)
             DontDestroyOnLoad(gameObject);

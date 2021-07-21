@@ -21,30 +21,29 @@ public class BattleAttack : State
     {
         base.Update();
 
-        if(ownerEntity.EmptyTarget == true)
+        if(ownerEntity.Dead)
         {
-            StateChange(StateControl.BATTLE_STATE.IDLE);
-            return;
+            StateChange(StateControl.BATTLE_STATE.END);
         }
 
         if(ownerEntity.EntityType == EntityManager.EntityType.Zombie)
         {
             if(ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetAttackRange(ownerEntity.TargetEntity))
             {
-                if (!stateControl.IsAttacked) 
+                if (ownerEntity.EnableAttack) 
                 {
-                    Debug.Log("Damage");
+                    // 움직임을 처리하는 것은 엔티티에서 & 여기서는 상태 전이만을 다룰 것
                     ownerEntity.Attack();
-                    stateControl.IsAttacked = true;
+                    ownerEntity.EnableAttack = true;
                     ownerEntity.DisableMove();
-                    stateControl.elapsedTime = 0f;
+                    ownerEntity.elapsedTime = 0f;
                 }
             }
             else
             {
                 if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetChaseRange(ownerEntity.TargetEntity))
                 {
-                    if (stateControl.IsAttacked)
+                    if (!ownerEntity.EnableAttack)
                         StateChange(StateControl.BATTLE_STATE.IDLE);
                     else
                         StateChange(StateControl.BATTLE_STATE.CHASE);
@@ -59,6 +58,12 @@ public class BattleAttack : State
 
     public override bool CheckState()
     {
+        if (ownerEntity.EmptyTarget == true)
+        {
+            StateChange(StateControl.BATTLE_STATE.IDLE);
+            return false;
+        }
+
         return true;
     }
 }

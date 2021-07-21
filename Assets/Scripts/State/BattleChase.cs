@@ -21,10 +21,9 @@ public class BattleChase : State
     {
         base.Update();
 
-        if (ownerEntity.EmptyTarget == true)
+        if(ownerEntity.Dead)
         {
-            StateChange(StateControl.BATTLE_STATE.IDLE);
-            return;
+            StateChange(StateControl.BATTLE_STATE.END);
         }
 
         if (ownerEntity.EntityType == EntityManager.EntityType.Zombie)
@@ -56,6 +55,12 @@ public class BattleChase : State
 
     public override bool CheckState()
     {
+        if (ownerEntity.EmptyTarget == true)
+        {
+            StateChange(StateControl.BATTLE_STATE.IDLE);
+            return false;
+        }
+
         return true;
     }
 }

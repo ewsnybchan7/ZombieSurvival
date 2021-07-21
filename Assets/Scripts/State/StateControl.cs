@@ -33,28 +33,19 @@ public class StateControl
     {
         OwnerEntity = entity;
 
-        battleStates = new State[(int)BATTLE_STATE.END];
+        battleStates = new State[(int)BATTLE_STATE.END + 1];
 
         battleStates[(int)BATTLE_STATE.IDLE] = new BattleIdle(this, ChangeState);
         battleStates[(int)BATTLE_STATE.PATROL] = new BattlePatrol(this, ChangeState);
         battleStates[(int)BATTLE_STATE.CHASE] = new BattleChase(this, ChangeState);
         battleStates[(int)BATTLE_STATE.ATTACK] = new BattleAttack(this, ChangeState);
         battleStates[(int)BATTLE_STATE.HIT] = new BattleHit(this, ChangeState);
+        battleStates[(int)BATTLE_STATE.END] = new BattleEnd(this, ChangeState);
     }
 
     public void Update()
     {
         battleStates[(int)eState].Update();
-
-        if(IsAttacked)
-        {
-            elapsedTime += Time.deltaTime;
-            
-            if(elapsedTime > AttackCoolTime)
-            {
-                IsAttacked = false;
-            }
-        }
     }
 
     public bool IsChangeState()
@@ -68,6 +59,12 @@ public class StateControl
 
     public PlayerEntity FindPlayerEntity(out BATTLE_STATE state)
     {
+        if (EntityManager.Instance.MainPlayer == null)
+        {
+            state = eState;
+            return null;
+        }
+
         if (IsTargetChaseRange(EntityManager.Instance.MainPlayer))
         {
             if (IsTargetAttackRange(EntityManager.Instance.MainPlayer))
@@ -101,7 +98,6 @@ public class StateControl
         battleStates[(int)prevState].Exit();
         battleStates[(int)eState].Enter();
     }
-
 
     public void SavePrevAttackState(BATTLE_STATE state)
     {

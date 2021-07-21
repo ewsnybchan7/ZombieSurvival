@@ -13,20 +13,34 @@ public class CameraControl : MonoBehaviour
     private Vector3 m_MoveVelocity;
     private Vector3 m_DesiredPosition;
 
-    //Cinemachine.CinemachineVirtualCamera;
+    private Cinemachine.CinemachineVirtualCamera PlayerFollowCam;
+    private PlayerEntity MainPlayer;
+
 
     private void Awake()
     {
         m_Camera = Camera.main;
+        PlayerFollowCam = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
+    }
+
+    private void FixedUpdate()
+    {
+        if(MainPlayer)
+        {
+            // shaking
+        }
     }
 
     private void Update()
     {
-        
-    }
-
-    void LateUpdate()
-    {
-
+        if(!MainPlayer)
+        {
+            MainPlayer = FindObjectOfType<PlayerEntity>();
+        }
+        else
+        {
+            PlayerFollowCam.Follow = MainPlayer.transform;
+            PlayerFollowCam.LookAt = MainPlayer.transform;
+        }
     }
 }

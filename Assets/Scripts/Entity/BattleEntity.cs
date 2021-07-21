@@ -12,12 +12,16 @@ public class BattleEntity : BaseEntity, IDamageable
     public bool HasTarget => (TargetEntity != null) ? true : false;
     public bool EmptyTarget => (TargetEntity == null) ? true : false;
 
-    public bool EnabledMove => (m_NavMeshAgent?.enabled == true && GetComponent<Rigidbody>() != null) ? true : false;
+    public bool EnabledMove => (m_NavMeshAgent?.enabled == true || GetComponent<Rigidbody>() != null) ? true : false;
 
     public float MovingSpeed { get; set; }
     public float PatrolSpeed { get; protected set; }
     public float ChaseSpeed { get; protected set; }
     public bool Chase { get; private set; }
+
+    public bool EnableAttack { get; set; }
+    public float AttackCoolTime = 2f;
+    public float elapsedTime = 0f;
 
     public float AttackRange { get; set; }
     public float ChaseRange { get; set; }
@@ -33,6 +37,7 @@ public class BattleEntity : BaseEntity, IDamageable
     protected Rigidbody m_Rigidbody;
     protected NavMeshAgent m_NavMeshAgent;
     protected Animator m_Animator;
+    protected CapsuleCollider m_Collider;
     
     protected delegate void IdleStateOp();
     protected event IdleStateOp IdleStateOperation;
@@ -88,10 +93,12 @@ public class BattleEntity : BaseEntity, IDamageable
                 }
             case StateControl.BATTLE_STATE.HIT:
                 {
+                    HitStateOperation?.Invoke();
                     break;
                 }
             case StateControl.BATTLE_STATE.END:
                 {
+                    EndStateOperation?.Invoke();
                     break;
                 }
         }
@@ -110,16 +117,16 @@ public class BattleEntity : BaseEntity, IDamageable
 
     public void BattleSetUp()
     {
-        m_Rigidbody = GetComponent<Rigidbody>();
-        m_Animator = GetComponent<Animator>();
 
-        m_StateControl = new StateControl(this);
     }
 
     public void EnableMove()
     {
         if (m_NavMeshAgent != null)
             m_NavMeshAgent.enabled = true;
+
+        if (m_Collider != null)
+            m_Collider.enabled = true;
 
         if (m_Rigidbody != null)
         {
@@ -130,8 +137,11 @@ public class BattleEntity : BaseEntity, IDamageable
 
     public void DisableMove()
     {
-        if(m_NavMeshAgent != null)
-            m_NavMeshAgent.enabled = false;
+        if (m_NavMeshAgent != null)
+        {
+            m_NavMeshAgent.isStopped = true;
+            m_NavMeshAgent.speed = 0;
+        }
 
         if (m_Rigidbody != null)
         {
@@ -162,6 +172,19 @@ public class BattleEntity : BaseEntity, IDamageable
         {
             m_NavMeshAgent.ResetPath();
             m_NavMeshAgent.SetDestination(dest);
+        }
+    }
+
+    public void CheckEnableAttack()
+    {
+        if (!EnableAttack)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (elapsedTime > AttackCoolTime)
+            {
+                EnableAttack = true;
+            }
         }
     }
 

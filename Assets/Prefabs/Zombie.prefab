@@ -93,7 +93,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5895112836277816029}
   - component: {fileID: 5895112836286883165}
-  - component: {fileID: 5895112837647236977}
   - component: {fileID: 5895112837647236978}
   - component: {fileID: 5895112837647236974}
   - component: {fileID: 5895112837647236979}
@@ -112,7 +111,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5895112836277393213}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.414, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5895112836277816025}
@@ -141,22 +140,6 @@ Animator:
   m_HasTransformHierarchy: 0
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!54 &5895112837647236977
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5895112836277393213}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 1
 --- !u!136 &5895112837647236978
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -165,7 +148,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5895112836277393213}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.3
   m_Height: 1.4
@@ -183,16 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee0ccc07ac80fc4aa982a5f38e6d136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftHand: {fileID: 0}
-  rightHand: {fileID: 0}
-  state: 0
-  PatrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  AttackCoolTime: 2
+  elapsedTime: 0
   HPImage: {fileID: 5895112837063140080}
 --- !u!195 &5895112837647236979
 NavMeshAgent:

@@ -10,7 +10,6 @@ public class UIManager : Singleton<UIManager>
     public delegate void UpdateUI();
     public UpdateUI UpdateStatusFunc;
 
-
     public GameObject GameUICanvas;
 
     public GameObject m_PlayerStatus;
@@ -23,6 +22,22 @@ public class UIManager : Singleton<UIManager>
     public Text m_GameScore;
 
     public GameObject m_MenuUI;
+
+    private void Start()
+    {
+        UpdateHpText(100, 100);
+        UpdateGunText("Uzi");
+        UpdateAmmoText(15, 15);
+        UpdateScoretText(0);
+    }
+
+    private void Update()
+    {
+        if(!MainPlayer)
+        {
+            MainPlayer = EntityManager.Instance.MainPlayer;
+        }
+    }
 
 
     public void UpdateHpText(float currentHP, float maxHP)

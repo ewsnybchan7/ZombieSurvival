@@ -15,7 +15,7 @@ public partial class PlayerEntity : BattleEntity
 
     public ParticleSystem m_BloodParticle;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         m_Gun.gameObject.SetActive(true);
     }
@@ -31,7 +31,7 @@ public partial class PlayerEntity : BattleEntity
     }
 
     // Update is called once per frame
-    protected override void FixedUpdate()
+    private void FixedUpdate()
     {
         Rotate();
         Move();
@@ -40,7 +40,7 @@ public partial class PlayerEntity : BattleEntity
         m_Animator.SetFloat("MoveX", Input.GetAxis("Vertical"));
         m_Animator.SetFloat("MoveY", Input.GetAxis("Horizontal"));
 
-        Attack();
+        PlayerAttack();
     }
 
     private void OnDisable()
@@ -50,11 +50,19 @@ public partial class PlayerEntity : BattleEntity
 
     private void PlayerSetUp()
     {
+        m_Rigidbody = GetComponent<Rigidbody>();
+        m_Animator = GetComponent<Animator>();
+        m_Collider = GetComponent<CapsuleCollider>();
+
         MaxHp = PLAYER_MAX_HP;
         CurrentHp = PLAYER_MAX_HP;
 
+        EntityType = EntityManager.EntityType.Player;
+
         leftHandMount = m_Gun.leftHandMount;
         rightHandMount = m_Gun.rightHandMount;
+
+        m_StateControl = new StateControl(this);
     }
 
     private void PlayerOnDamaged()

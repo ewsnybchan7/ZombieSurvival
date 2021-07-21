@@ -21,8 +21,35 @@ public class BattleHit : State
     {
         base.Update();
 
-        if (stateControl.TargetEntity != null)
-            return;
+        if (ownerEntity.Dead)
+        {
+            StateChange(StateControl.BATTLE_STATE.END);
+        }
+
+        if (ownerEntity.EntityType == EntityManager.EntityType.Zombie)
+        {
+            if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetAttackRange(ownerEntity.TargetEntity))
+            {
+                if (!stateControl.IsAttacked)
+                {
+                    
+                }
+            }
+            else
+            {
+                if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetChaseRange(ownerEntity.TargetEntity))
+                {
+                    if (stateControl.IsAttacked)
+                        StateChange(StateControl.BATTLE_STATE.IDLE);
+                    else
+                        StateChange(StateControl.BATTLE_STATE.CHASE);
+                }
+                else
+                {
+                    StateChange(StateControl.BATTLE_STATE.IDLE);
+                }
+            }
+        }
     }
 
     public override bool CheckState()

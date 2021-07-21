@@ -15,17 +15,17 @@ public class BaseEntity : MonoBehaviour, IDisposable
 
     public EntityManager.EntityType EntityType { get; protected set; }
 
+    protected virtual void OnEnable()
+    {
+        SetUpOperation?.Invoke();
+    }
+
     protected virtual void Start()
     {
         SetUpOperation?.Invoke();
     }
 
     protected virtual void Update()
-    {
-
-    }
-
-    protected virtual void FixedUpdate()
     {
 
     }

@@ -26,10 +26,9 @@ public class BattlePatrol : State
     {
         base.Update();
 
-        if (ownerEntity.EmptyTarget == true)
+        if (ownerEntity.Dead)
         {
-            StateChange(StateControl.BATTLE_STATE.IDLE);
-            return;
+            StateChange(StateControl.BATTLE_STATE.END);
         }
 
         if (ownerEntity.EntityType == EntityManager.EntityType.Zombie)
@@ -37,21 +36,15 @@ public class BattlePatrol : State
             if (Goal)
             {
                 ownerEntity.EnableMove();
+                ownerEntity.SetPatrolMode();
                 ownerEntity.SetDestination(ownerEntity.TargetEntity.Position);
                 Goal = false;
             }
 
             StateControl.BATTLE_STATE state = StateOperation();
 
-            switch (state)
-            {
-                case StateControl.BATTLE_STATE.PATROL:
-                    
-                    break;
-                default:
-                    StateChange(state);
-                    break;
-            }
+            if (state != StateControl.BATTLE_STATE.PATROL)
+                StateChange(state);
         }
     }
 
