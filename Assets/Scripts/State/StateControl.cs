@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-public class StateControl : MonoBehaviour
+public class StateControl
 {
-    public enum BATTLE_STATE{
+    public enum BATTLE_STATE {
         IDLE,
-        SEARCH,
         PATROL,
         CHASE,
         ATTACK,
@@ -12,7 +11,7 @@ public class StateControl : MonoBehaviour
     }
 
     public BattleEntity OwnerEntity { get; private set; }
-    private BaseEntity targetEntity;
+    public BaseEntity targetEntity;
     public BaseEntity TargetEntity;
 
     public bool HasTarget => (TargetEntity != null) ? true : false;
@@ -26,18 +25,36 @@ public class StateControl : MonoBehaviour
     public int attackType { get; private set; }
     public int skillType { get; private set; }
 
+    public bool IsAttacked { get; set; }
+    public float elapsedTime = 0f;
+    public float AttackCoolTime = 2f;
+
     public StateControl(BattleEntity entity)
     {
         OwnerEntity = entity;
 
+        battleStates = new State[(int)BATTLE_STATE.END];
+
         battleStates[(int)BATTLE_STATE.IDLE] = new BattleIdle(this, ChangeState);
-        battleStates[(int)BATTLE_STATE.SEARCH] = new BattleSearch(this, ChangeState);
+        battleStates[(int)BATTLE_STATE.PATROL] = new BattlePatrol(this, ChangeState);
+        battleStates[(int)BATTLE_STATE.CHASE] = new BattleChase(this, ChangeState);
         battleStates[(int)BATTLE_STATE.ATTACK] = new BattleAttack(this, ChangeState);
+        battleStates[(int)BATTLE_STATE.HIT] = new BattleHit(this, ChangeState);
     }
 
     public void Update()
     {
         battleStates[(int)eState].Update();
+
+        if(IsAttacked)
+        {
+            elapsedTime += Time.deltaTime;
+            
+            if(elapsedTime > AttackCoolTime)
+            {
+                IsAttacked = false;
+            }
+        }
     }
 
     public bool IsChangeState()
@@ -45,7 +62,31 @@ public class StateControl : MonoBehaviour
         return eState == BATTLE_STATE.IDLE;
     }
 
-    public bool IsTargetAttackRange() => Vector3.Distance(OwnerEntity.transform.position, targetEntity.transform.position) <= OwnerEntity.AttackRange;
+    public bool IsTargetAttackRange(BaseEntity target) => Vector3.Distance(OwnerEntity.transform.position, target.transform.position) <= OwnerEntity.AttackRange;
+
+    public bool IsTargetChaseRange(BaseEntity target) => Vector3.Distance(OwnerEntity.transform.position, target.transform.position) <= OwnerEntity.ChaseRange;
+
+    public PlayerEntity FindPlayerEntity(out BATTLE_STATE state)
+    {
+        if (IsTargetChaseRange(EntityManager.Instance.MainPlayer))
+        {
+            if (IsTargetAttackRange(EntityManager.Instance.MainPlayer))
+            {
+                state = BATTLE_STATE.ATTACK;
+            }
+            else
+            {
+                state = BATTLE_STATE.CHASE;
+            }
+
+            return EntityManager.Instance.MainPlayer;
+        }
+        else
+        {
+            state = eState;
+            return null;
+        }
+    }
 
     public void SetAttackType(int type)
     {
@@ -57,11 +98,10 @@ public class StateControl : MonoBehaviour
         prevState = eState;
         eState = state;
 
-        Debug.Log(eState);
-
         battleStates[(int)prevState].Exit();
         battleStates[(int)eState].Enter();
     }
+
 
     public void SavePrevAttackState(BATTLE_STATE state)
     {

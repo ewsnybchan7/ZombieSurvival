@@ -9,13 +9,14 @@ public partial class ZombieEntity : BattleEntity
     private float m_ZombieDamage = 25.0f;
     private float ZOMBIE_MAX_HP = 100.0f;
 
-    public bool Chase { get; private set; }
-
-    private NavMeshAgent m_NavMeshAgent;
-
-    public List<Transform> PatrolPoints;
+    public int CurrentPoint { get; set; }
 
     public Image HPImage;
+
+    private Coroutine PatrolCoroutine = null;
+    private bool IsPatrolRoutineEnd = false;
+
+    Coroutine TimerCoroutine = null;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -23,29 +24,25 @@ public partial class ZombieEntity : BattleEntity
         SetUpOperation += ZombieSetUp;
         OnDeath += ZombieDeath;
         OnDamagedOperation += ZombieOnDamaged;
-        PatrolDistance = 5f;
+
+        IdleStateOperation += ZombieIdleOp;
+        PatrolStateOperation += ZombiePatrolOp;
+        ChaseStateOperation += ZombieChaseOp;
+        AttackStateOperation += ZombieAttackOp;
 
         base.Start();
     }
 
-    // Update is called once per frame
-    protected override void FixedUpdate()
+    protected override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            m_StateControl.ChangeState(StateControl.BATTLE_STATE.IDLE);
-        }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            m_StateControl.ChangeState(StateControl.BATTLE_STATE.SEARCH);
-        }
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            m_StateControl.ChangeState(StateControl.BATTLE_STATE.ATTACK);
-        }
+        m_StateControl.Update();
 
-        //Patrol();
+        base.Update();
+
+        ZombieAttackAnim();
     }
+
+    // Update is called once per frame
 
     private void ZombieSetUp()
     {
@@ -53,23 +50,51 @@ public partial class ZombieEntity : BattleEntity
         CurrentHp = ZOMBIE_MAX_HP;
         Damage = m_ZombieDamage;
 
+        ChaseRange = 5f;
+        AttackRange = 0.8f;
+
         PatrolSpeed = 0.5f;
+        ChaseSpeed = 1.5f;
 
         m_NavMeshAgent = GetComponent<NavMeshAgent>();
 
-        state = AttackState.Idle;
+        EntityType = EntityManager.EntityType.Zombie;
+
+        m_StateControl = new StateControl(this);
+        m_StateControl.ChangeState(StateControl.BATTLE_STATE.IDLE);
+    }
+
+    private void ZombieIdleOp()
+    {
+        m_Animator?.SetInteger("type", 0);   
+    }
+
+    private void ZombiePatrolOp()
+    {
+        m_Animator?.SetInteger("type", 1);
+    }
+
+    private void ZombieChaseOp()
+    {
+        m_Animator?.SetInteger("type", 2);  
+    }
+
+    private void ZombieAttackOp()
+    {
+        if(!m_StateControl.IsAttacked)
+        {
+            Debug.Log("Anim");
+            m_Animator?.SetInteger("type", 3);
+        }
     }
 
     private void ZombieDeath()
     {
-        m_Animator.SetBool("Chase", false);
         m_Animator.SetTrigger("Die");
 
-        m_NavMeshAgent.enabled = false;
-        m_Rigidbody.velocity = Vector3.zero;
-        m_Rigidbody.angularVelocity = Vector3.zero;
+        DisableMove();
 
-        StartCoroutine(Death());
+        Invoke("Death", 4f);
     }
 
     private void ZombieOnDamaged()
@@ -77,11 +102,21 @@ public partial class ZombieEntity : BattleEntity
         HPImage.fillAmount = CurrentHp / MaxHp;
     }
 
-    private IEnumerator Death()
+    private void Death()
     {
-        yield return new WaitForSeconds(4.0f);
-
         this.gameObject.SetActive(false);
         Destroy(this);
+    }
+
+    private void ZombieAttackAnim()
+    {
+        if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") &&
+            m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.2f &&
+            m_StateControl.eState != StateControl.BATTLE_STATE.ATTACK)
+        {
+            m_Animator.enabled = false;
+        }
+
+        m_Animator.enabled = true;
     }
 }

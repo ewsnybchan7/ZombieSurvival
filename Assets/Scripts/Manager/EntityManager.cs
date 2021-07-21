@@ -8,6 +8,8 @@ public class EntityManager : Singleton<EntityManager>
     public readonly Dictionary<long, BaseEntity> m_EntityTable = new Dictionary<long, BaseEntity>();
     public PlayerEntity MainPlayer { get; private set; }
 
+    public BaseEntity[] PatrolPoints;
+
     public Action<long> OnRemoveEntity_Event { get; set; }
 
     public enum EntityType
@@ -15,7 +17,8 @@ public class EntityManager : Singleton<EntityManager>
         None,
         Zombie,
         Player,
-        Item
+        Item,
+        Patrol
     }
 
     //public BaseEntity AddEntity()
@@ -28,12 +31,13 @@ public class EntityManager : Singleton<EntityManager>
 
     }
 
+    
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        MainPlayer = FindObjectOfType<PlayerEntity>();   
     }
 
     // Update is called once per frame

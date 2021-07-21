@@ -13,6 +13,8 @@ public partial class PlayerEntity : BattleEntity
 
     private const float PLAYER_MAX_HP = 100f;
 
+    public ParticleSystem m_BloodParticle;
+
     private void OnEnable()
     {
         m_Gun.gameObject.SetActive(true);

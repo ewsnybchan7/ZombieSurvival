@@ -4,148 +4,124 @@ using UnityEngine;
 
 public partial class ZombieEntity : BattleEntity
 {
-    public Transform leftHand;
-    public Transform rightHand;
-
-    public float PatrolDistance { get; protected set; }
-    public enum AttackState
-    {
-        Idle,
-        Goal,
-        Patrol,
-        Chase
-    }
-
-    public AttackState state = AttackState.Patrol;
-    private PlayerEntity player;
-    private int currentPointIndex;
-
-
-    private Coroutine PatrolCoroutine = null;
-    private bool IsPatrolRoutineEnd = false;
-
-    public float PatrolSpeed { get; protected set; }
-
-    private bool IsAttack = false;
-
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player") 
-        {
-            IDamageable target = collision.gameObject.GetComponent<IDamageable>();
-            Attack(target);
-        }
+        //if (collision.gameObject.tag == "Player") 
+        //{
+        //    IDamageable target = collision.gameObject.GetComponent<IDamageable>();
+        //    Attack(target);
+        //}
     }
 
-    void Attack(IDamageable player)
-    {
-        player.OnDamaged(0);
-        m_Animator.SetBool("Attack", true);
-        m_NavMeshAgent.enabled = false;
-        IsAttack = true;
-        state = AttackState.Goal;
-    }
+    //void Attack(IDamageable player)
+    //{
+    //    player.OnDamaged(0);
+    //    m_Animator.SetBool("Attack", true);
+    //    m_NavMeshAgent.enabled = false;
+    //    IsAttack = true;
+    //    state = AttackState.Goal;
+    //}
 
     void Patrol()
     {
-        if (Dead) return;
+        //if (Dead) return;
 
-        if (IsAttack && player)
-        {
-            StopAttack();
+        //if (IsAttack && player)
+        //{
+        //    StopAttack();
 
-            float xDist = Mathf.Abs(transform.position.x - player.transform.position.x);
-            float zDist = Mathf.Abs(transform.position.z - player.transform.position.z);
+        //    float xDist = Mathf.Abs(transform.position.x - player.transform.position.x);
+        //    float zDist = Mathf.Abs(transform.position.z - player.transform.position.z);
 
-            if (xDist > 1 || zDist > 1)
-            {
-                player = null;
-                Chase = false;
-                IsAttack = false;
-            }
+        //    if (xDist > 1 || zDist > 1)
+        //    {
+        //        player = null;
+        //        Chase = false;
+        //        IsAttack = false;
+        //    }
 
-            return;
-        }
+        //    return;
+        //}
 
-        Collider[] overlapedPlayer = Physics.OverlapSphere(this.transform.position, PatrolDistance, LayerMask.GetMask("Player"));
+        //Collider[] overlapedPlayer = Physics.OverlapSphere(this.transform.position, PatrolDistance, LayerMask.GetMask("Player"));
 
-        if (overlapedPlayer.Length > 0)
-        {
-            state = AttackState.Chase;
-            player = overlapedPlayer[0].GetComponent<PlayerEntity>();
-            Chase = true;
-            m_NavMeshAgent.speed = 1.5f;
+        //if (overlapedPlayer.Length > 0)
+        //{
+        //    state = AttackState.Chase;
+        //    player = overlapedPlayer[0].GetComponent<PlayerEntity>();
+        //    Chase = true;
+        //    m_NavMeshAgent.speed = 1.5f;
 
-            m_Animator.SetBool("Chase", true);
-            m_Animator.SetBool("Walk", false);
-            m_Animator.SetBool("Idle", false);
+        //    m_Animator.SetBool("Chase", true);
+        //    m_Animator.SetBool("Walk", false);
+        //    m_Animator.SetBool("Idle", false);
 
-            m_NavMeshAgent.SetDestination(player.transform.position);
-        }
-        else
-        {
-            player = null;
-            Chase = false;
+        //    m_NavMeshAgent.SetDestination(player.transform.position);
+        //}
+        //else
+        //{
+        //    player = null;
+        //    Chase = false;
 
-            if (state == AttackState.Chase || state == AttackState.Goal || state == AttackState.Idle)
-            {
-                if(PatrolCoroutine == null)
-                {
-                    PatrolCoroutine = StartCoroutine(FindPatrolPoint());
-                    IsPatrolRoutineEnd = false;
-                }
-                else
-                {
-                    if(IsPatrolRoutineEnd)
-                    {
-                        StopCoroutine(PatrolCoroutine);
-                        PatrolCoroutine = null;
-                    }
-                }
-            }
-            else
-            {
-                float xDist = Mathf.Abs(transform.position.x - PatrolPoints[currentPointIndex].position.x);
-                float zDist = Mathf.Abs(transform.position.z - PatrolPoints[currentPointIndex].position.z);
+        //    if (state == AttackState.Chase || state == AttackState.Goal || state == AttackState.Idle)
+        //    {
+        //        if(PatrolCoroutine == null)
+        //        {
+        //            PatrolCoroutine = StartCoroutine(FindPatrolPoint());
+        //            IsPatrolRoutineEnd = false;
+        //        }
+        //        else
+        //        {
+        //            if(IsPatrolRoutineEnd)
+        //            {
+        //                StopCoroutine(PatrolCoroutine);
+        //                PatrolCoroutine = null;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //float xDist = Mathf.Abs(transform.position.x - PatrolPoints[currentPointIndex].position.x);
+        //        //float zDist = Mathf.Abs(transform.position.z - PatrolPoints[currentPointIndex].position.z);
 
-                if(xDist < 1 && zDist < 1)
-                {
-                    state = AttackState.Goal;
-                }
-            }
-        }
+        //        //if(xDist < 1 && zDist < 1)
+        //        //{
+        //        //    state = AttackState.Goal;
+        //        //}
+        //    }
+        //}
     }
 
     private IEnumerator FindPatrolPoint()
     {
-        m_Animator.SetBool("Chase", false);
-        m_Animator.SetBool("Walk", false);
-        m_Animator.SetBool("Idle", true);
+        //m_Animator.SetBool("Chase", false);
+        //m_Animator.SetBool("Walk", false);
+        //m_Animator.SetBool("Idle", true);
 
-        state = AttackState.Idle;
-        m_NavMeshAgent.enabled = false;
+        //state = AttackState.Idle;
+        //m_NavMeshAgent.enabled = false;
 
-        yield return new WaitForSeconds(2.0f);
+        //yield return new WaitForSeconds(2.0f);
 
-        state = AttackState.Patrol;
-        m_Animator.SetBool("Chase", false);
-        m_Animator.SetBool("Walk", true);
-        m_Animator.SetBool("Idle", false);
+        //state = AttackState.Patrol;
+        //m_Animator.SetBool("Chase", false);
+        //m_Animator.SetBool("Walk", true);
+        //m_Animator.SetBool("Idle", false);
 
-        m_NavMeshAgent.enabled = true;
-        m_NavMeshAgent.speed = PatrolSpeed;
-        m_NavMeshAgent.ResetPath();
+        //m_NavMeshAgent.enabled = true;
+        //m_NavMeshAgent.speed = PatrolSpeed;
+        //m_NavMeshAgent.ResetPath();
 
-        currentPointIndex = Random.Range(0, PatrolPoints.Count);
-        m_NavMeshAgent.SetDestination(PatrolPoints[currentPointIndex].transform.position);
-        IsPatrolRoutineEnd = true;
+        ////m_NavMeshAgent.SetDestination([currentPointIndex].transform.position);
+        //IsPatrolRoutineEnd = true;
+        yield return null;
+
     }
 
     private IEnumerator StopAttack()
     {
-        yield return new WaitUntil(() => !IsAttack);
-        m_Animator.SetBool("Attack", false);
-        
-
+        //yield return new WaitUntil(() => !IsAttack);
+        //m_Animator.SetBool("Attack", false);
+        yield return null;
     }
 }

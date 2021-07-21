@@ -1,5 +1,5 @@
 ﻿using System;
-
+using UnityEngine;
 
 public class BattleAttack : State
 {
@@ -17,24 +17,44 @@ public class BattleAttack : State
             return;
     }
 
-    BaseEntity EvaluateTarget()
-    {
-        return new BaseEntity();
-    }
-
     public override void Update()
     {
         base.Update();
 
-        stateControl.TargetEntity = EvaluateTarget();
+        if(ownerEntity.EmptyTarget == true)
+        {
+            StateChange(StateControl.BATTLE_STATE.IDLE);
+            return;
+        }
 
-        ////if (stateControl.TargetEntity != null)
-        ////    StateChange(StateControl.BATTLE_STATE.);
-
-        //else
-        //{
-
-        //}
+        if(ownerEntity.EntityType == EntityManager.EntityType.Zombie)
+        {
+            if(ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetAttackRange(ownerEntity.TargetEntity))
+            {
+                if (!stateControl.IsAttacked) 
+                {
+                    Debug.Log("Damage");
+                    ownerEntity.Attack();
+                    stateControl.IsAttacked = true;
+                    ownerEntity.DisableMove();
+                    stateControl.elapsedTime = 0f;
+                }
+            }
+            else
+            {
+                if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetChaseRange(ownerEntity.TargetEntity))
+                {
+                    if (stateControl.IsAttacked)
+                        StateChange(StateControl.BATTLE_STATE.IDLE);
+                    else
+                        StateChange(StateControl.BATTLE_STATE.CHASE);
+                }
+                else
+                {
+                    StateChange(StateControl.BATTLE_STATE.IDLE);
+                }
+            }
+        }
     }
 
     public override bool CheckState()

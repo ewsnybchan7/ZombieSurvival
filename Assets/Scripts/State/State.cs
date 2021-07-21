@@ -20,7 +20,7 @@ public class State
     // State 진입
     public virtual void Enter()
     {
-        Debug.Log("Enter => Entity : " + ownerEntity.name + "State : " + stateControl.eState);
+        //Debug.Log("Enter => Entity : " + ownerEntity + "State : " + stateControl.prevState + "->" + stateControl.eState);
     }
 
     public virtual void Exit() { }
@@ -35,7 +35,7 @@ public class State
 
         var dist = Vector3.Distance(ownerEntity.transform.position, target.transform.position);
 
-        if (!(dist > ownerEntity.SearchRange))
+        if (!(dist > ownerEntity.ChaseRange))
             return;
 
         stateControl.TargetEntity = null;
