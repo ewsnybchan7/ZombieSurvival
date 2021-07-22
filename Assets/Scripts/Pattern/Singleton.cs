@@ -6,9 +6,6 @@ public class Singleton<Class> : MonoBehaviour where Class : MonoBehaviour
     [SerializeField]
     protected bool _persistent = true;
 
-    protected delegate void AwakeOp();
-    protected event AwakeOp AwakeOperation;
-
     public static Class Instance
     {
         get
@@ -20,13 +17,11 @@ public class Singleton<Class> : MonoBehaviour where Class : MonoBehaviour
         }
     }
 
-    static Class m_Instance;
-
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         if (_persistent)
             DontDestroyOnLoad(gameObject);
-
-        AwakeOperation?.Invoke();
     }
+
+    static Class m_Instance;
 }

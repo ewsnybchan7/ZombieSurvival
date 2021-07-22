@@ -30,11 +30,12 @@ public class BattleAttack : State
         {
             if(ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetAttackRange(ownerEntity.TargetEntity))
             {
+                
                 if (ownerEntity.EnableAttack) 
                 {
                     // 움직임을 처리하는 것은 엔티티에서 & 여기서는 상태 전이만을 다룰 것
                     ownerEntity.Attack();
-                    ownerEntity.EnableAttack = true;
+                    ownerEntity.EnableAttack = false;
                     ownerEntity.DisableMove();
                     ownerEntity.elapsedTime = 0f;
                 }

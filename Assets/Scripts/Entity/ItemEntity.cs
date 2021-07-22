@@ -20,7 +20,7 @@ public class ItemEntity : BaseEntity, IItem
 
     }
 
-    protected override void Update()
+    protected virtual void Update()
     {
         
     }

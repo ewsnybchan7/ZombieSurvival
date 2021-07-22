@@ -24,6 +24,7 @@ public partial class ZombieEntity : BattleEntity
         ChaseStateOperation += ZombieChaseOp;
         AttackStateOperation += ZombieAttackOp;
         EndStateOperation += ZombieEndOp;
+        OnDeath += ZombieDeath;
 
         base.Start();
     }
@@ -48,12 +49,15 @@ public partial class ZombieEntity : BattleEntity
         m_Animator.enabled = true;
         m_Collider.enabled = true;
 
-        // Hp
+        // Hp variable
         MaxHp = ZOMBIE_MAX_HP;
         CurrentHp = ZOMBIE_MAX_HP;
         HPImage.fillAmount = CurrentHp / MaxHp;
 
+        // Attack variable
         Damage = m_ZombieDamage;
+
+        EnableAttack = true;
 
         ChaseRange = 5f;
         AttackRange = 0.8f;
@@ -62,6 +66,7 @@ public partial class ZombieEntity : BattleEntity
         ChaseSpeed = 1.5f;
 
         EntityType = EntityManager.EntityType.Zombie;
+        gameObject.layer = LayerMask.NameToLayer("Zombie");
 
         m_StateControl = new StateControl(this);
         m_StateControl.ChangeState(StateControl.BATTLE_STATE.IDLE);
@@ -99,16 +104,20 @@ public partial class ZombieEntity : BattleEntity
 
     private void ZombieEndOp()
     {
+        DisableMove();
+    }
+
+    private void ZombieDeath()
+    {
         m_Animator.SetTrigger("Die");
 
-        DisableMove();
+        gameObject.layer = LayerMask.NameToLayer("Dead");
 
-        m_Collider.enabled = false;
+        GameManager.Instance.Score += 10;
+        UIManager.UpdateScoretText();
 
         StartCoroutine(Death());
     }
-
-    Coroutine DeathCoroutine = null;
 
     private IEnumerator Death()
     {

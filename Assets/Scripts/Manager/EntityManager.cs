@@ -21,8 +21,8 @@ public class EntityManager : Singleton<EntityManager>
     public GameObject Item1Prefab; 
     public GameObject Item2Prefab;
     
-    public Action<long> OnRemoveEntity_Event { get; set; }
-
+    public Action OnRemoveEntity_Event { get; set; }
+    
     public enum EntityType
     {
         None,
@@ -65,6 +65,7 @@ public class EntityManager : Singleton<EntityManager>
 
         entity?.gameObject.SetActive(false);
         entity?.transform.SetParent(this.transform);
+
         return entity;
     }
 
@@ -103,7 +104,7 @@ public class EntityManager : Singleton<EntityManager>
             ZombieEntity zombie = Instance.ZombiePool.Dequeue();
             zombie.gameObject.SetActive(true);
             zombie.transform.SetParent(null);
-
+            
             return zombie;
         }
         else
@@ -111,7 +112,7 @@ public class EntityManager : Singleton<EntityManager>
             ZombieEntity zombie = (ZombieEntity)Instance.CreateEntity(EntityType.Zombie, 2000);
             zombie?.transform.SetParent(null);
             zombie?.gameObject.SetActive(true);
-
+            
             return zombie;
         }
     }
@@ -146,13 +147,8 @@ public class EntityManager : Singleton<EntityManager>
         }
     }
 
-
-    protected override void Awake()
+    private void OnEnable()
     {
-        base.Awake();
-
-        _persistent = false;
-
         ZombiePool = new Queue<ZombieEntity>();
         ItemPool = new Queue<ItemEntity>();
 

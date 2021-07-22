@@ -30,7 +30,6 @@ public class BattleEntity : BaseEntity, IDamageable
     public float CurrentHp { get; protected set; } // 현재 체력
     public float Damage { get; protected set; }
     public bool Dead => CurrentHp <= 0; // 죽음 여부
-    public bool Alive => CurrentHp >= 0;
     
     public event Action OnDeath; // 죽음 이벤트
 
@@ -67,40 +66,43 @@ public class BattleEntity : BaseEntity, IDamageable
         base.Start();
     }
 
-    protected override void Update()
+    protected virtual void Update()
     {
-        switch (m_StateControl.eState)
+        if (!GameManager.Instance.IsGameOver)
         {
-            case StateControl.BATTLE_STATE.IDLE:
-                {
-                    IdleStateOperation?.Invoke();
-                    break;
-                }
-            case StateControl.BATTLE_STATE.PATROL:
-                {
-                    PatrolStateOperation?.Invoke();
-                    break;
-                }
-            case StateControl.BATTLE_STATE.CHASE:
-                {
-                    ChaseStateOperation?.Invoke();
-                    break;
-                }
-            case StateControl.BATTLE_STATE.ATTACK:
-                {
-                    AttackStateOperation?.Invoke();
-                    break;
-                }
-            case StateControl.BATTLE_STATE.HIT:
-                {
-                    HitStateOperation?.Invoke();
-                    break;
-                }
-            case StateControl.BATTLE_STATE.END:
-                {
-                    EndStateOperation?.Invoke();
-                    break;
-                }
+            switch (m_StateControl.eState)
+            {
+                case StateControl.BATTLE_STATE.IDLE:
+                    {
+                        IdleStateOperation?.Invoke();
+                        break;
+                    }
+                case StateControl.BATTLE_STATE.PATROL:
+                    {
+                        PatrolStateOperation?.Invoke();
+                        break;
+                    }
+                case StateControl.BATTLE_STATE.CHASE:
+                    {
+                        ChaseStateOperation?.Invoke();
+                        break;
+                    }
+                case StateControl.BATTLE_STATE.ATTACK:
+                    {
+                        AttackStateOperation?.Invoke();
+                        break;
+                    }
+                case StateControl.BATTLE_STATE.HIT:
+                    {
+                        HitStateOperation?.Invoke();
+                        break;
+                    }
+                case StateControl.BATTLE_STATE.END:
+                    {
+                        EndStateOperation?.Invoke();
+                        break;
+                    }
+            }
         }
     }
 
@@ -110,7 +112,7 @@ public class BattleEntity : BaseEntity, IDamageable
 
         CurrentHp -= damage;
 
-        if(Alive) OnDamagedOperation?.Invoke();
+        OnDamagedOperation?.Invoke();
 
         if(Dead) OnDeath?.Invoke();
     }

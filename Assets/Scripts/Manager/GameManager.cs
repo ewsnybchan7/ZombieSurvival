@@ -10,16 +10,13 @@ public class GameManager : Singleton<GameManager>
     public int Score { get; set; }
     public int GameTime { get; set; }
 
-    // Start is called before the first frame update
-    void Start()
+    public bool IsGameOver { get; set; }
+
+    private void Awake()
     {
         Score = 0;
         GameTime = 0;
-    }
-
-    private void FixedUpdate()
-    {
-        UIManager.Instance.UpdateScoretText(Score);
+        IsGameOver = false;
     }
 
     // Update is called once per frame

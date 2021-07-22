@@ -28,7 +28,7 @@ public class UIManager : Singleton<UIManager>
         UpdateHpText(100, 100);
         UpdateGunText("Uzi");
         UpdateAmmoText(15, 15);
-        UpdateScoretText(0);
+        UpdateScoretText();
     }
 
     private void Update()
@@ -40,33 +40,33 @@ public class UIManager : Singleton<UIManager>
     }
 
 
-    public void UpdateHpText(float currentHP, float maxHP)
+    public static void UpdateHpText(float currentHP, float maxHP)
     {
-        m_PlayerHP.text = currentHP + " / " + maxHP;
+        Instance.m_PlayerHP.text = currentHP + " / " + maxHP;
     }
 
-    public void UpdateGunText(string gunName)
+    public static void UpdateGunText(string gunName)
     {
-        m_PlayerGun.text = gunName;
+        Instance.m_PlayerGun.text = gunName;
     }
 
-    public void UpdateAmmoText(int currentAmmo, int maxAmmo)
+    public static void UpdateAmmoText(int currentAmmo, int maxAmmo)
     {
-        m_PlayerAmmo.text = "Ammo : " + currentAmmo + " / " + maxAmmo;
+        Instance.m_PlayerAmmo.text = "Ammo : " + currentAmmo + " / " + maxAmmo;
     }
 
-    public void UpdateWaveText()
-    {
-
-    }
-
-    public void UpdateTimeText()
+    public static void UpdateWaveText()
     {
 
     }
 
-    public void UpdateScoretText(int curScore)
+    public static void UpdateTimeText()
     {
-        m_GameScore.text = curScore.ToString();
+
+    }
+
+    public static void UpdateScoretText()
+    {
+        Instance.m_GameScore.text = GameManager.Instance.Score.ToString();
     }
 }

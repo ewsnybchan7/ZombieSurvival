@@ -81,7 +81,7 @@ public class Gun : BaseEntity, IShotable
         }
 
         // юс╫ц
-        UIManager.Instance.UpdateAmmoText(CurAmmo, MaxAmmo);
+        UIManager.UpdateAmmoText(CurAmmo, MaxAmmo);
     }
 
     
@@ -89,7 +89,8 @@ public class Gun : BaseEntity, IShotable
     {
         Vector3 hitPosition = Vector3.zero;
 
-        if (Physics.Raycast(FireTransform.position, FireTransform.forward, out var hit, FireDistance))
+        int layerMask = 1 << LayerMask.NameToLayer("Zombie");
+        if (Physics.Raycast(FireTransform.position, FireTransform.forward, out var hit, FireDistance, layerMask))
         {
             IDamageable target = hit.collider.GetComponent<IDamageable>();
 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5895112836277816025}
   - component: {fileID: 5895112836290993053}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Zombie_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5895112837647236978}
   - component: {fileID: 5895112837647236974}
   - component: {fileID: 5895112837647236979}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 5895112836650075179}
   - component: {fileID: 5895112836650075178}
   - component: {fileID: 5895112836650075177}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,7 +300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5895112837017109426}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Left Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 5895112837063140079}
   - component: {fileID: 5895112837063140081}
   - component: {fileID: 5895112837063140080}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: HPImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5895112838037623174}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Right Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}

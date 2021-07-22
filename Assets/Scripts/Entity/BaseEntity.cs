@@ -25,11 +25,6 @@ public class BaseEntity : MonoBehaviour, IDisposable
         SetUpOperation?.Invoke();
     }
 
-    protected virtual void Update()
-    {
-
-    }
-
     public virtual void Clear() { }
 
     public void Dispose()

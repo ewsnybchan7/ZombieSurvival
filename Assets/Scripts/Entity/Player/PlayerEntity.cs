@@ -67,8 +67,7 @@ public partial class PlayerEntity : BattleEntity
 
     private void PlayerOnDamaged()
     {
-        UIManager.Instance.UpdateHpText(CurrentHp, MaxHp);
-
+        UIManager.UpdateHpText(CurrentHp, MaxHp);
         // Damage를 입었다는 클릭커 깜빡깜빡 효과 추가
         // World canvas를 둬서 숫자 데미지 효과
         // 블러드 파티클 정도?

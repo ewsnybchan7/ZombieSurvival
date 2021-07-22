@@ -26,6 +26,9 @@ public class BattleHit : State
             StateChange(StateControl.BATTLE_STATE.END);
         }
 
+
+        // 언제 쳐 맞는지 확인
+        // 맞고나면 다시 이전 상태로 되돌리기
         if (ownerEntity.EntityType == EntityManager.EntityType.Zombie)
         {
             if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetAttackRange(ownerEntity.TargetEntity))
