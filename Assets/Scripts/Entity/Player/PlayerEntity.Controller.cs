@@ -46,25 +46,30 @@ public partial class PlayerEntity : BattleEntity
         m_Rigidbody.MovePosition(this.transform.position + movement);
     }
 
-    private void PlayerAttack()
+    private void PlayerInput()
     {
         if (Input.GetMouseButton(0))
         {
-            if(m_Gun.m_FireState == Gun.FireState.Ready)
+            if (m_Gun.m_FireState == Gun.FireState.Ready)
             {
                 m_Gun.Fire();
             }
-            else if(m_Gun.m_FireState == Gun.FireState.Empty)
+            else if (m_Gun.m_FireState == Gun.FireState.Empty)
             {
-                m_Gun.Reload();
-                m_Animator.SetTrigger("Reload");
+                PlayerReload();
             }
         }
-        else if(Input.GetKeyDown(KeyCode.R))
+
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            m_Gun.Reload();
-            m_Animator.SetTrigger("Reload");
+            PlayerReload();
         }
+    }
+
+    private void PlayerReload()
+    {
+        m_Gun.Reload();
+        m_Animator.SetTrigger("Reload");
     }
 
     void UseItem()

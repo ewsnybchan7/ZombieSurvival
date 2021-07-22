@@ -38,6 +38,15 @@ public class Gun : BaseEntity, IShotable
     protected delegate void FireOp();
     protected event FireOp FireOperation;
 
+    Coroutine coFireEffect = null;
+
+    private void Awake()
+    {
+        SetUpOperation += GunSetUp;
+
+        FireOperation += Uzi_Fire;
+    }
+
     void GunSetUp()
     {
         m_FireState = FireState.Ready;
@@ -57,15 +66,6 @@ public class Gun : BaseEntity, IShotable
         m_LineRenderer.positionCount = 2;
         m_LineRenderer.enabled = false;
 
-        FireOperation += Uzi_Fire;
-    }
-
-
-    protected override void Start()
-    {
-        SetUpOperation += GunSetUp;
-
-        base.Start();
     }
 
     public void Fire()
@@ -89,7 +89,9 @@ public class Gun : BaseEntity, IShotable
     {
         Vector3 hitPosition = Vector3.zero;
 
-        int layerMask = 1 << LayerMask.NameToLayer("Zombie");
+        int layerMask = (1 << LayerMask.NameToLayer("Dead"));
+        layerMask = ~layerMask;
+
         if (Physics.Raycast(FireTransform.position, FireTransform.forward, out var hit, FireDistance, layerMask))
         {
             IDamageable target = hit.collider.GetComponent<IDamageable>();
@@ -124,7 +126,6 @@ public class Gun : BaseEntity, IShotable
         }
     }
 
-    Coroutine coFireEffect = null;
     private IEnumerator Uzi_FireEffect()
     {
         // 파티클 시작
@@ -157,5 +158,6 @@ public class Gun : BaseEntity, IShotable
         CurAmmo = MaxAmmo;
 
         m_FireState = FireState.Ready;
+        UIManager.UpdateAmmoText(CurAmmo, MaxAmmo);
     }
 }

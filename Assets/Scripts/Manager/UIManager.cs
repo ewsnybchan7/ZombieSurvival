@@ -23,12 +23,11 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject m_MenuUI;
 
-    private void Start()
+    public GameObject GameOverCanvas;
+
+    protected override void Start()
     {
-        UpdateHpText(100, 100);
-        UpdateGunText("Uzi");
-        UpdateAmmoText(15, 15);
-        UpdateScoretText();
+        base.Start();
     }
 
     private void Update()
@@ -39,6 +38,13 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public static void InitUI()
+    {
+        UpdateHpText(100, 100);
+        UpdateGunText("Uzi");
+        UpdateAmmoText(15, 15);
+        UpdateScoretText();
+    }
 
     public static void UpdateHpText(float currentHP, float maxHP)
     {

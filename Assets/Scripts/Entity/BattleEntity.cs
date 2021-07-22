@@ -8,6 +8,11 @@ public class BattleEntity : BaseEntity, IDamageable
 {
     protected StateControl m_StateControl;
 
+    protected Rigidbody m_Rigidbody;
+    protected NavMeshAgent m_NavMeshAgent;
+    protected Animator m_Animator;
+    protected CapsuleCollider m_Collider;
+
     public BaseEntity TargetEntity { get; set; }
     public bool HasTarget => (TargetEntity != null) ? true : false;
     public bool EmptyTarget => (TargetEntity == null) ? true : false;
@@ -17,11 +22,11 @@ public class BattleEntity : BaseEntity, IDamageable
     public float MovingSpeed { get; set; }
     public float PatrolSpeed { get; protected set; }
     public float ChaseSpeed { get; protected set; }
-    public bool Chase { get; private set; }
 
-    public bool EnableAttack { get; set; }
+    public bool EnableAttack = true;
+    public bool IsAttacking = false;
     public float AttackCoolTime = 2f;
-    public float elapsedTime = 0f;
+    public float LastAttackTime = 0f;
 
     public float AttackRange { get; set; }
     public float ChaseRange { get; set; }
@@ -33,11 +38,9 @@ public class BattleEntity : BaseEntity, IDamageable
     
     public event Action OnDeath; // Á×À½ ÀÌº¥Æ®
 
-    protected Rigidbody m_Rigidbody;
-    protected NavMeshAgent m_NavMeshAgent;
-    protected Animator m_Animator;
-    protected CapsuleCollider m_Collider;
-    
+    protected delegate void OnDamagedOp();
+    protected event OnDamagedOp OnDamagedOperation;
+
     protected delegate void IdleStateOp();
     protected event IdleStateOp IdleStateOperation;
 
@@ -56,53 +59,40 @@ public class BattleEntity : BaseEntity, IDamageable
     protected delegate void EndStateOp();
     protected event IdleStateOp EndStateOperation;
 
-    protected delegate void OnDamagedOp();
-    protected event OnDamagedOp OnDamagedOperation;
-
-    protected override void Start()
-    {
-        SetUpOperation += BattleSetUp;
-
-        base.Start();
-    }
-
     protected virtual void Update()
     {
-        if (!GameManager.Instance.IsGameOver)
+        switch (m_StateControl.eState)
         {
-            switch (m_StateControl.eState)
-            {
-                case StateControl.BATTLE_STATE.IDLE:
-                    {
-                        IdleStateOperation?.Invoke();
-                        break;
-                    }
-                case StateControl.BATTLE_STATE.PATROL:
-                    {
-                        PatrolStateOperation?.Invoke();
-                        break;
-                    }
-                case StateControl.BATTLE_STATE.CHASE:
-                    {
-                        ChaseStateOperation?.Invoke();
-                        break;
-                    }
-                case StateControl.BATTLE_STATE.ATTACK:
-                    {
-                        AttackStateOperation?.Invoke();
-                        break;
-                    }
-                case StateControl.BATTLE_STATE.HIT:
-                    {
-                        HitStateOperation?.Invoke();
-                        break;
-                    }
-                case StateControl.BATTLE_STATE.END:
-                    {
-                        EndStateOperation?.Invoke();
-                        break;
-                    }
-            }
+            case StateControl.BATTLE_STATE.IDLE:
+                {
+                    IdleStateOperation?.Invoke();
+                    break;
+                }
+            case StateControl.BATTLE_STATE.PATROL:
+                {
+                    PatrolStateOperation?.Invoke();
+                    break;
+                }
+            case StateControl.BATTLE_STATE.CHASE:
+                {
+                    ChaseStateOperation?.Invoke();
+                    break;
+                }
+            case StateControl.BATTLE_STATE.ATTACK:
+                {
+                    AttackStateOperation?.Invoke();
+                    break;
+                }
+            case StateControl.BATTLE_STATE.HIT:
+                {
+                    HitStateOperation?.Invoke();
+                    break;
+                }
+            case StateControl.BATTLE_STATE.END:
+                {
+                    EndStateOperation?.Invoke();
+                    break;
+                }
         }
     }
 
@@ -122,7 +112,7 @@ public class BattleEntity : BaseEntity, IDamageable
 
     }
 
-    public void EnableMove()
+    public virtual void EnableMove()
     {
         if (m_NavMeshAgent != null)
             m_NavMeshAgent.enabled = true;
@@ -137,7 +127,7 @@ public class BattleEntity : BaseEntity, IDamageable
         }
     }
 
-    public void DisableMove()
+    public virtual void DisableMove()
     {
         if (m_NavMeshAgent != null)
         {
@@ -177,22 +167,8 @@ public class BattleEntity : BaseEntity, IDamageable
         }
     }
 
-    public void CheckEnableAttack()
-    {
-        if (!EnableAttack)
-        {
-            elapsedTime += Time.deltaTime;
-
-            if (elapsedTime > AttackCoolTime)
-            {
-                EnableAttack = true;
-            }
-        }
-    }
-
-    public virtual bool Attack()
+    public virtual void Attack()
     {
         TargetEntity.GetComponent<IDamageable>().OnDamaged(Damage);
-        return true;
     }
 }

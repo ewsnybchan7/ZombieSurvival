@@ -11,36 +11,44 @@ public partial class PlayerEntity : BattleEntity
 
     public ItemEntity EquipItem;
 
-    private const float PLAYER_MAX_HP = 100f;
+    private const float PLAYER_MAX_HP = 100;
 
     public ParticleSystem m_BloodParticle;
 
-    protected override void OnEnable()
-    {
-        m_Gun.gameObject.SetActive(true);
-    }
-
-    // Start is called before the first frame update
-    protected override void Start()
+    private void Awake()
     {
         SetUpOperation += PlayerSetUp;
         OnDeath += PlayerDeath;
         OnDamagedOperation += PlayerOnDamaged;
 
-        base.Start();
+
     }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        m_Gun.gameObject.SetActive(true);
+    }
+
 
     // Update is called once per frame
     private void FixedUpdate()
     {
-        Rotate();
-        Move();
+        if (!Dead)
+        {
+            Rotate();
+            Move();
 
-        // animator 설정 x축 y축 값을 설정하는 좋은 방법
-        m_Animator.SetFloat("MoveX", Input.GetAxis("Vertical"));
-        m_Animator.SetFloat("MoveY", Input.GetAxis("Horizontal"));
+            // animator 설정 x축 y축 값을 설정하는 좋은 방법
+            m_Animator.SetFloat("MoveX", Input.GetAxis("Vertical"));
+            m_Animator.SetFloat("MoveY", Input.GetAxis("Horizontal"));
+        }
+    }
 
-        PlayerAttack();
+    protected override void Update()
+    {
+        PlayerInput();
     }
 
     private void OnDisable()
@@ -63,11 +71,13 @@ public partial class PlayerEntity : BattleEntity
         rightHandMount = m_Gun.rightHandMount;
 
         m_StateControl = new StateControl(this);
+        //m_StateControl = new StateControl
     }
 
     private void PlayerOnDamaged()
     {
         UIManager.UpdateHpText(CurrentHp, MaxHp);
+        Debug.Log("Damage");
         // Damage를 입었다는 클릭커 깜빡깜빡 효과 추가
         // World canvas를 둬서 숫자 데미지 효과
         // 블러드 파티클 정도?
@@ -76,6 +86,18 @@ public partial class PlayerEntity : BattleEntity
     public void PlayerDeath()
     {
         m_Animator.SetTrigger("Die");
+
+        m_Rigidbody.velocity = Vector3.zero;
+        m_Rigidbody.angularVelocity = Vector3.zero;
+        GameManager.Instance.IsGameOver = true;
+
+        StartCoroutine(Death());
+    }
+
+    private IEnumerator Death()
+    {
+        yield return new WaitForSeconds(4.0f);
+        EntityManager.ReturnEntity(this);
     }
 
     private void OnAnimatorIK(int layerIndex)

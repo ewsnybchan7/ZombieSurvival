@@ -13,6 +13,7 @@ public class EntityManager : Singleton<EntityManager>
     public PlayerEntity MainPlayer;
 
     public BaseEntity[] PatrolPoints;
+    public GameObject Spawners;
     public EntitySpawner[] ZombieSpawners;
     public EntitySpawner PlayerSpawner;
 
@@ -37,6 +38,15 @@ public class EntityManager : Singleton<EntityManager>
         None,
         Bullet,
         Heart,
+    }
+    protected override void Start()
+    {
+        base.Start();
+
+        ZombiePool = new Queue<ZombieEntity>();
+        ItemPool = new Queue<ItemEntity>();
+
+        EntityTable = new Dictionary<long, BaseEntity>();
     }
 
     private BaseEntity CreateEntity(EntityType entitytype, long usn)
@@ -71,6 +81,9 @@ public class EntityManager : Singleton<EntityManager>
 
     public static void ReturnEntity(BaseEntity entity)
     {
+        if (entity == null)
+            return;
+
         switch (entity.EntityType)
         {
             case EntityType.Zombie:
@@ -145,13 +158,5 @@ public class EntityManager : Singleton<EntityManager>
 
             return item;
         }
-    }
-
-    private void OnEnable()
-    {
-        ZombiePool = new Queue<ZombieEntity>();
-        ItemPool = new Queue<ItemEntity>();
-
-        EntityTable = new Dictionary<long, BaseEntity>();
     }
 }

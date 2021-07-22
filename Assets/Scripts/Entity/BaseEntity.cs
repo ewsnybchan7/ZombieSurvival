@@ -20,11 +20,6 @@ public class BaseEntity : MonoBehaviour, IDisposable
         SetUpOperation?.Invoke();
     }
 
-    protected virtual void Start()
-    {
-        SetUpOperation?.Invoke();
-    }
-
     public virtual void Clear() { }
 
     public void Dispose()
