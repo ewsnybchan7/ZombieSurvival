@@ -26,22 +26,23 @@ public class BattleAttack : State
             StateChange(StateControl.BATTLE_STATE.END);
         }
 
-        if (!ownerEntity.EnableAttack)
+        if (!ownerEntity.EnableAttack) 
             return;
 
         if (ownerEntity.EntityType == EntityManager.EntityType.Zombie)
         {
-            if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetAttackRange(ownerEntity.TargetEntity) == false) 
+            if (!ownerEntity.IsAttacking)
             {
-                ownerEntity.EnableAttack = false;
-
-                if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetChaseRange(ownerEntity.TargetEntity))
+                if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetAttackRange(ownerEntity.TargetEntity) == false)
                 {
-                    StateChange(StateControl.BATTLE_STATE.CHASE);
-                }
-                else
-                {
-                    StateChange(StateControl.BATTLE_STATE.IDLE);
+                    if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetChaseRange(ownerEntity.TargetEntity))
+                    {
+                        StateChange(StateControl.BATTLE_STATE.CHASE);
+                    }
+                    else
+                    {
+                        StateChange(StateControl.BATTLE_STATE.IDLE);
+                    }
                 }
             }
         }

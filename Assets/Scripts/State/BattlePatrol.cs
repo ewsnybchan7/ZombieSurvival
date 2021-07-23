@@ -4,7 +4,6 @@ using UnityEngine;
 public class BattlePatrol : State
 {
     private bool Goal;
-    private bool IsOnce;
 
     public BattlePatrol(StateControl control, Action<StateControl.BATTLE_STATE> callback)
         : base(control, callback)

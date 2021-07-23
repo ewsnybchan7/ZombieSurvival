@@ -19,8 +19,6 @@ public class BattleIdle : State
 
         if (!CheckState())
             return;
-
-        ownerEntity.DisableMove();
     }
 
     public override void Update()

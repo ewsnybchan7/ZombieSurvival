@@ -26,7 +26,6 @@ public class BattleEntity : BaseEntity, IDamageable
     public bool EnableAttack = true;
     public bool IsAttacking = false;
     public float AttackCoolTime = 2f;
-    public float LastAttackTime = 0f;
 
     public float AttackRange { get; set; }
     public float ChaseRange { get; set; }
@@ -36,6 +35,7 @@ public class BattleEntity : BaseEntity, IDamageable
     public float Damage { get; protected set; }
     public bool Dead => CurrentHp <= 0; // Á×À½ ¿©ºÎ
     
+
     public event Action OnDeath; // Á×À½ ÀÌº¥Æ®
 
     protected delegate void OnDamagedOp();

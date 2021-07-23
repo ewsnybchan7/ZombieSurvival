@@ -8,14 +8,14 @@ using System;
 public partial class ZombieEntity : BattleEntity
 {
     protected float m_PatrolSpeed = 0.5f;
-    protected float m_ChaseSpeed = 0.5f;
+    protected float m_ChaseSpeed = 1.5f;
 
     protected float m_ZombieDamage = 5;
     protected float m_ZombieMaxHp = 100.0f;
 
     protected float m_ZombieAttackCoolTime = 2;
 
-    protected float m_ZombieAttackRange = 0.8f;
+    public float m_ZombieAttackRange = 1f;
     protected float m_ZombieChaseRange = 5f;
 
     public int CurrentPoint { get; set; }
@@ -37,15 +37,9 @@ public partial class ZombieEntity : BattleEntity
 
     protected override void Update()
     {
-        base.Update();
-
-        float curTime = Time.time;
-        if (curTime - LastAttackTime > AttackCoolTime)
-        {
-            EnableAttack = true;
-        }
-
         m_StateControl.Update();
+
+        base.Update();
     }
 
     // Update is called once per frame
@@ -55,7 +49,9 @@ public partial class ZombieEntity : BattleEntity
         EntityType = EntityManager.EntityType.Zombie;
         gameObject.layer = LayerMask.NameToLayer("Zombie");
 
-        m_StateControl = new StateControl(this);
+        if (m_StateControl == null)
+            m_StateControl = new StateControl(this);
+        
         m_StateControl.ChangeState(StateControl.BATTLE_STATE.IDLE);
 
         TargetEntity = null;
@@ -77,13 +73,24 @@ public partial class ZombieEntity : BattleEntity
         ChaseRange = m_ZombieChaseRange;
         AttackRange = m_ZombieAttackRange;
         AttackCoolTime = m_ZombieAttackCoolTime;
-        LastAttackTime = 0f;
         EnableAttack = true;
 
-        m_Animator = GetComponent<Animator>();
-        m_Collider = GetComponent<CapsuleCollider>();
-        m_NavMeshAgent = GetComponent<NavMeshAgent>();
-
+        if (m_Animator == null)
+        {
+            m_Animator = GetComponent<Animator>();
+            m_Animator.enabled = true;
+        }
+        if (m_Collider == null)
+        {
+            m_Collider = GetComponent<CapsuleCollider>();
+            m_Collider.enabled = true;
+        }
+        if (m_NavMeshAgent == null)
+        {
+            m_NavMeshAgent = GetComponent<NavMeshAgent>();
+            m_NavMeshAgent.enabled = true;
+        }
+        
         m_NavMeshAgent.enabled = true;
         m_Animator.enabled = true;
         m_Collider.enabled = true;
@@ -92,6 +99,7 @@ public partial class ZombieEntity : BattleEntity
     private void ZombieIdleOp()
     {
         m_Animator?.SetInteger("type", 0);
+        DisableMove();
     }
 
     private void ZombiePatrolOp()
@@ -101,41 +109,55 @@ public partial class ZombieEntity : BattleEntity
 
     private void ZombieChaseOp()
     {
-        m_Animator?.SetInteger("type", 2);  
+        m_Animator?.SetInteger("type", 2);
+        EnableMove();
+        SetChaseMode();
+        SetDestination(TargetEntity.Position);
     }
 
     private void ZombieAttackOp()
     {
-        if (m_StateControl.eState == StateControl.BATTLE_STATE.ATTACK && EnableAttack)
+        if (EnableAttack)
         {
             Attack();
         }
 
-        DisableMove();
-        ZombieAttackAnimControl();
     }
 
     public override void Attack()
     {
-        StartCoroutine(AttackEnd());
+        if(!IsAttacking)
+            StartCoroutine(ZombieAttack());
     }
 
-    private IEnumerator AttackEnd()
+
+    private IEnumerator ZombieAttack()
     {
-        m_Animator?.SetInteger("type", 3);
+        IsAttacking = true;
         EnableAttack = false;
 
-        yield return new WaitUntil(() => (m_StateControl.IsTargetAttackRange(TargetEntity) == false ||
-            (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") && m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f) ||
-            Time.time - LastAttackTime > AttackCoolTime));
+        m_Animator?.SetInteger("type", 3);
+       
 
-        m_Animator?.SetInteger("type", 0);
+        float StartAttackTime = Time.time;
 
-        float curTime = Time.time;
-        float percentage = (curTime - LastAttackTime) / AttackCoolTime;
-        LastAttackTime = Time.time;
+        while (true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            TargetEntity.GetComponent<IDamageable>().OnDamaged(0.2f);
+            if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") && m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.2f) 
+                continue;
 
-        TargetEntity.GetComponent<IDamageable>().OnDamaged(Mathf.Round(Damage * percentage));
+            if (!m_StateControl.IsTargetAttackRange(TargetEntity))
+                break;
+        }
+
+        m_Animator.SetInteger("type", 0);
+
+        IsAttacking = false;
+
+        yield return new WaitUntil(() => Time.time - StartAttackTime > AttackCoolTime);
+        EnableAttack = true;
     }
 
     private void ZombieOnDamaged()
@@ -166,12 +188,13 @@ public partial class ZombieEntity : BattleEntity
         EntityManager.ReturnEntity(this);
     }
 
-    private void ZombieAttackAnimControl()
+    private void OnTriggerEnter(Collider other)
     {
-        if(m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") &&
-            EnableAttack == false)
-        {
-            m_Animator.SetInteger("type", 0);
-        }
+        EnableAttack = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        EnableAttack = false;
     }
 }

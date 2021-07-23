@@ -30,13 +30,8 @@ public class BattleChase : State
         {
             if (ownerEntity.TargetEntity is PlayerEntity && stateControl.IsTargetChaseRange(ownerEntity.TargetEntity))
             {
-                ownerEntity.EnableMove();
-
                 if (ownerEntity.EnabledMove)
                 {
-                    ownerEntity.SetChaseMode();
-                    ownerEntity.SetDestination(ownerEntity.TargetEntity.Position);
-
                     if(stateControl.IsTargetAttackRange(ownerEntity.TargetEntity))
                     {
                         StateChange(StateControl.BATTLE_STATE.ATTACK);

@@ -44,7 +44,7 @@ public class EntitySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CanSpawn && nEntity == 0)
+        if (CanSpawn)
         {
             elapsedTime += Time.deltaTime;
 

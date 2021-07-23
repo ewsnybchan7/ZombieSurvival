@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class ItemEntity : BaseEntity, IItem
 {
-    public float LivingTime { get; protected set; } = 3.0f;
+    public float LivingTime { get; protected set; } = 15.0f;
     public uint ItemCode { get; protected set; }
+
+    private void Awake()
+    {
+        SetUpOperation += ItemSetUpOp;
+    }
+
 
     private void ItemSetUpOp()
     {
