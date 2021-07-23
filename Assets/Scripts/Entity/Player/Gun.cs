@@ -12,8 +12,10 @@ public class Gun : BaseEntity, IShotable
     }
 
     public FireState m_FireState { get; protected set; }
-    public int MaxAmmo { get; protected set; }
-    public int CurAmmo { get; protected set; }
+    public int MaxAmmo { get; set; }
+    public int CurAmmo { get; set; }
+
+    public bool InfinityMode { get; set; }
 
     public float FireRate { get; protected set; }
     public float EffectRate { get; private set; }
@@ -84,7 +86,6 @@ public class Gun : BaseEntity, IShotable
         UIManager.UpdateAmmoText(CurAmmo, MaxAmmo);
     }
 
-    
     private void Uzi_Fire()
     {
         Vector3 hitPosition = Vector3.zero;
@@ -108,7 +109,9 @@ public class Gun : BaseEntity, IShotable
             hitPosition = FireTransform.position + FireTransform.forward * FireDistance;
         }
 
-        CurAmmo--;
+        if(!InfinityMode)
+            CurAmmo--;
+
         if (CurAmmo > 0)
         {
             m_LineRenderer.SetPosition(0, FireTransform.position);

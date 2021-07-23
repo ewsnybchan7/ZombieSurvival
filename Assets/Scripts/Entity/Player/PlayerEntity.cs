@@ -100,6 +100,13 @@ public partial class PlayerEntity : BattleEntity
         EntityManager.ReturnEntity(this);
     }
 
+    public void HealHp(float hp)
+    {
+        CurrentHp += hp;
+        if (CurrentHp > MaxHp) CurrentHp = MaxHp;
+        UIManager.UpdateHpText(CurrentHp, MaxHp);
+    }
+
     private void OnAnimatorIK(int layerIndex)
     {
         // 총의 기준점 gunPivot을 3D 모델의 오른쪽 팔꿈치 위치로 이동
@@ -119,5 +126,25 @@ public partial class PlayerEntity : BattleEntity
 
         m_Animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandMount.position);
         m_Animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandMount.rotation);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Item"))
+        {
+            other.GetComponent<IItem>().OnUse();
+        }
+    }
+
+    public void OnInfinityMode(float time)
+    {
+        StartCoroutine(InfinityModeCoroutine(time));
+    }
+
+    private IEnumerator InfinityModeCoroutine(float time)
+    {
+        EntityManager.Instance.MainPlayer.m_Gun.InfinityMode = true;
+        yield return new WaitForSeconds(time);
+        EntityManager.Instance.MainPlayer.m_Gun.InfinityMode = false;
     }
 }

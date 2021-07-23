@@ -188,12 +188,12 @@ GameObject:
   - component: {fileID: 63939992}
   - component: {fileID: 63939993}
   m_Layer: 0
-  m_Name: Spawner (8)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &63939992
 Transform:
   m_ObjectHideFlags: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -373,12 +373,12 @@ GameObject:
   - component: {fileID: 291196313}
   - component: {fileID: 291196314}
   m_Layer: 0
-  m_Name: Spawner (10)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &291196313
 Transform:
   m_ObjectHideFlags: 0
@@ -408,7 +408,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -515,12 +515,12 @@ GameObject:
   - component: {fileID: 493271312}
   - component: {fileID: 493271313}
   m_Layer: 0
-  m_Name: Spawner (1)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &493271312
 Transform:
   m_ObjectHideFlags: 0
@@ -550,7 +550,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 1
   nEntity: 0
   CanSpawn: 1
@@ -897,6 +897,7 @@ Transform:
   - {fileID: 291196313}
   - {fileID: 1465009304}
   - {fileID: 14584221}
+  - {fileID: 1759771418}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -971,7 +972,7 @@ GameObject:
   - component: {fileID: 701809146}
   - component: {fileID: 701809147}
   m_Layer: 0
-  m_Name: Spawner
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1006,7 +1007,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 0
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 5
   nEntity: 0
   CanSpawn: 1
@@ -1596,7 +1597,7 @@ GameObject:
   - component: {fileID: 985831744}
   - component: {fileID: 985831745}
   m_Layer: 0
-  m_Name: Spawner (9)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1631,7 +1632,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -1735,7 +1736,7 @@ GameObject:
   - component: {fileID: 1163350166}
   - component: {fileID: 1163350167}
   m_Layer: 0
-  m_Name: Spawner (2)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1770,7 +1771,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -1911,7 +1912,7 @@ GameObject:
   - component: {fileID: 1465009304}
   - component: {fileID: 1465009305}
   m_Layer: 0
-  m_Name: Spawner (11)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1946,7 +1947,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -2223,7 +2224,7 @@ GameObject:
   - component: {fileID: 1510574548}
   - component: {fileID: 1510574549}
   m_Layer: 0
-  m_Name: Spawner (7)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2258,7 +2259,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -2536,7 +2537,7 @@ GameObject:
   - component: {fileID: 1614244414}
   - component: {fileID: 1614244415}
   m_Layer: 0
-  m_Name: Spawner (4)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2569,6 +2570,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Entity: 1
+  EntityList: []
+  IsRandomSpawn: 1
+  IsMultiSpawn: 1
+  FixedSpawnCoolTime: 0
+  nEntity: 0
+  CanSpawn: 1
+  SpawnCoolTime: 0
+  elapsedTime: 0
+--- !u!1 &1759771417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1759771418}
+  - component: {fileID: 1759771419}
+  m_Layer: 0
+  m_Name: Item Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1759771418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759771417}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 644938314}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1759771419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759771417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093ea6df089d2cb47ac30ad0438cabb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Entity: 3
   EntityList: []
   IsRandomSpawn: 1
   IsMultiSpawn: 0
@@ -2831,12 +2884,12 @@ GameObject:
   - component: {fileID: 1900372461}
   - component: {fileID: 1900372462}
   m_Layer: 0
-  m_Name: Spawner (5)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1900372461
 Transform:
   m_ObjectHideFlags: 0
@@ -2866,7 +2919,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -3012,12 +3065,12 @@ GameObject:
   - component: {fileID: 1958960370}
   - component: {fileID: 1958960371}
   m_Layer: 0
-  m_Name: Spawner (6)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1958960370
 Transform:
   m_ObjectHideFlags: 0
@@ -3047,7 +3100,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
@@ -3143,12 +3196,12 @@ GameObject:
   - component: {fileID: 2083235847}
   - component: {fileID: 2083235848}
   m_Layer: 0
-  m_Name: Spawner (3)
+  m_Name: Zombie Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2083235847
 Transform:
   m_ObjectHideFlags: 0
@@ -3178,7 +3231,7 @@ MonoBehaviour:
   Entity: 1
   EntityList: []
   IsRandomSpawn: 1
-  IsMultiSpawn: 0
+  IsMultiSpawn: 1
   FixedSpawnCoolTime: 0
   nEntity: 0
   CanSpawn: 1
