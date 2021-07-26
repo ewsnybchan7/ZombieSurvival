@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-    PlayerEntity MainPlayer;
+    static PlayerEntity MainPlayer;
 
     public delegate void UpdateUI();
     public UpdateUI UpdateStatusFunc;
@@ -40,9 +40,11 @@ public class UIManager : Singleton<UIManager>
 
     public static void InitUI()
     {
-        UpdateHpText(100, 100);
-        UpdateGunText("Uzi");
-        UpdateAmmoText(15, 15);
+        MainPlayer = EntityManager.Instance.MainPlayer;
+
+        UpdateHpText(MainPlayer.CurrentHp, MainPlayer.MaxHp);
+        UpdateGunText(MainPlayer.m_Gun.Name);
+        UpdateAmmoText(MainPlayer.m_Gun.CurAmmo, MainPlayer.m_Gun.MaxAmmo);
         UpdateScoretText();
     }
 

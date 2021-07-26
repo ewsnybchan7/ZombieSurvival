@@ -1,0 +1,40 @@
+{
+    "Zombie":[
+        {
+            "id":2001,
+            "type":"normal",
+            "hp":100,
+            "attack":5
+        },
+        {
+            "id":2002,
+            "type":"fast",
+            "hp":100,
+            "attack":5
+        }
+    ],
+    "Item":[
+        {
+            "id":3001,
+            "type":"healpack"
+        },
+        {
+            "id":3002,
+            "type":"infinityammo"
+        },
+        {
+            "id":3005,
+            "type":"Gun",
+            "Gun": [
+                {
+                    "id":4001,
+                    "name":"Uzi"
+                },
+                {
+                    "id":4002,
+                    "name":"Shotgun"
+                }
+            ]
+        }
+    ]
+}

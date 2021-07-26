@@ -71,9 +71,4 @@ public partial class PlayerEntity : BattleEntity
         m_Gun.Reload();
         m_Animator.SetTrigger("Reload");
     }
-
-    void UseItem()
-    {
-
-    }
 }

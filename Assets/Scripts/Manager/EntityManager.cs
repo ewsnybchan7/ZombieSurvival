@@ -5,22 +5,24 @@ using UnityEditor;
 
 public class EntityManager : Singleton<EntityManager>
 {
-    private Dictionary<long, BaseEntity> EntityTable;
+    private Dictionary<long, GameObject> ItemTable;
 
     private Queue<ZombieEntity> ZombiePool;
     private Queue<ItemEntity> ItemPool;
 
     public PlayerEntity MainPlayer;
 
-    public BaseEntity[] PatrolPoints;
+    public BaseEntity Patrols;
+    public BaseEntity[] PatrolPoints { get; private set; }
     public GameObject Spawners;
-    public EntitySpawner[] ZombieSpawners;
+    public List<EntitySpawner> ZombieSpawners { get; private set; }
     public EntitySpawner PlayerSpawner;
 
     public GameObject PlayerPrefab;
     public GameObject ZombiePrefab;
-    public GameObject Item1Prefab; 
-    public GameObject Item2Prefab;
+    public GameObject HealPackPrefab; 
+    public GameObject InfinityAmmoPrefab;
+    public GameObject ItemGunPrefab;
     
     public Action OnRemoveEntity_Event { get; set; }
     
@@ -31,22 +33,33 @@ public class EntityManager : Singleton<EntityManager>
         Player,
         Item,
         Patrol,
+        End
     }
 
     public enum ItemType
     {
         None,
-        Bullet,
+        Infinity,
         Heart,
+        Gun,
+        End
     }
     protected override void Start()
     {
         base.Start();
 
+        PatrolPoints = Patrols.GetComponentsInChildren<BaseEntity>();
+        ZombieSpawners = ZombieSpawners.
+
+
         ZombiePool = new Queue<ZombieEntity>();
         ItemPool = new Queue<ItemEntity>();
 
-        EntityTable = new Dictionary<long, BaseEntity>();
+        ItemTable = new Dictionary<long, GameObject>();
+
+        ItemTable.Add(3001, InfinityAmmoPrefab);
+        ItemTable.Add(3002, HealPackPrefab);
+        //ItemTable.Add(3003, ItemGunPrefab);
     }
 
     private BaseEntity CreateEntity(EntityType entitytype, long usn)
@@ -64,8 +77,7 @@ public class EntityManager : Singleton<EntityManager>
                 break;
 
             case EntityType.Item:
-                BaseEntity itemPrefab = EntityTable[usn];
-                entity = Instantiate(itemPrefab).GetComponent<ItemEntity>();
+                entity = Instantiate(ItemTable[usn]).GetComponent<ItemEntity>();
                 break;
 
             default:
@@ -140,6 +152,8 @@ public class EntityManager : Singleton<EntityManager>
         return Instance.MainPlayer;
     }
 
+
+    // item code로 바꾸기
     public static ItemEntity GetItemEntity(ItemType itemtype)
     {
         if (Instance.ItemPool.Count > 0)

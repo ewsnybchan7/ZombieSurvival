@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEditor;
 
 public class EntitySpawner : MonoBehaviour
@@ -66,7 +67,10 @@ public class EntitySpawner : MonoBehaviour
 
                 default:
                     break;
+
             }
+
+            elapsedTime = 0f;
         }
     }
 
@@ -77,8 +81,6 @@ public class EntitySpawner : MonoBehaviour
         zombie.transform.localPosition = Vector3.zero;
         EntityList.Add(zombie);
         nEntity++;
-
-        elapsedTime = 0f;
 
         NextSpawnCoolTime();
     }
@@ -96,12 +98,19 @@ public class EntitySpawner : MonoBehaviour
 
         EntityList.Add(player);
         nEntity++;
-
-        elapsedTime = 0f;
     }
 
-    private void SpawnItem()
+    public void SpawnItem()
     {
+        ItemEntity item = EntityManager.GetItemEntity((EntityManager.ItemType)Random.Range(1, (int)EntityManager.ItemType.Gun));
 
+        Vector3 point = NavMeshUtil.GetRandomPoint(this.transform.position, 20f);
+
+        item.transform.position = point;
+        item.gameObject.SetActive(true);
+        item.transform.SetParent(this.transform);
+
+        EntityList.Add(item);
+        nEntity++;
     }
 }

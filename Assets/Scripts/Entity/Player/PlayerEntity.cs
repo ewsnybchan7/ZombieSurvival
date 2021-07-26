@@ -4,6 +4,7 @@ using UnityEngine;
 
 public partial class PlayerEntity : BattleEntity
 {
+    private Dictionary<string, Gun> playerGuns;
     public Gun m_Gun;
     public Transform gunTransform; // 총 배치의 기준점
     private Transform leftHandMount; // 왼손이 위치할 지점
@@ -20,17 +21,14 @@ public partial class PlayerEntity : BattleEntity
         SetUpOperation += PlayerSetUp;
         OnDeath += PlayerDeath;
         OnDamagedOperation += PlayerOnDamaged;
-
-
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        m_Gun.gameObject.SetActive(true);
+        m_Gun?.gameObject.SetActive(true);
     }
-
 
     // Update is called once per frame
     private void FixedUpdate()
@@ -53,7 +51,7 @@ public partial class PlayerEntity : BattleEntity
 
     private void OnDisable()
     {
-        m_Gun.gameObject.SetActive(false);
+        m_Gun?.gameObject.SetActive(false);
     }
 
     private void PlayerSetUp()
@@ -67,11 +65,41 @@ public partial class PlayerEntity : BattleEntity
 
         EntityType = EntityManager.EntityType.Player;
 
+        m_StateControl = new StateControl(this);
+        //m_StateControl = new StateControl
+    }
+
+    private void Start()
+    {
+        if (playerGuns == null)
+        {
+            playerGuns = new Dictionary<string, Gun>();
+
+            for (int i = 0; i < gunTransform.childCount; i++)
+            {
+                Gun gun = gunTransform.GetChild(i)?.GetComponent<Gun>();
+
+                if (gun)
+                {
+                    playerGuns.Add(gun.Name, gun);
+                }
+            }
+        }
+
+        m_Gun = playerGuns["Uzi"];
+        
+        foreach(var gun in playerGuns)
+        {
+            if(gun.Key != "Uzi")
+            {
+                gun.Value.gameObject.SetActive(false);
+            }
+        }
+
         leftHandMount = m_Gun.leftHandMount;
         rightHandMount = m_Gun.rightHandMount;
 
-        m_StateControl = new StateControl(this);
-        //m_StateControl = new StateControl
+        m_Gun.gameObject.SetActive(true);
     }
 
     private void PlayerOnDamaged()

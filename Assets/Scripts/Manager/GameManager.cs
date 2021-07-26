@@ -46,6 +46,8 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.GameOverCanvas.SetActive(false);
         EntityManager.Instance.Spawners.SetActive(true);
 
+        yield return new WaitUntil(() => EntityManager.Instance.MainPlayer);
+
         UIManager.InitUI();
     }
 

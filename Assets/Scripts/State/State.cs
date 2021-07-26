@@ -20,7 +20,7 @@ public class State
     // State 진입
     public virtual void Enter()
     {
-        Debug.Log("Enter => Entity : " + ownerEntity + "State : " + stateControl.prevState + "->" + stateControl.eState);
+        //Debug.Log("Enter => Entity : " + ownerEntity + "State : " + stateControl.prevState + "->" + stateControl.eState);
     }
 
     public virtual void Exit() { }

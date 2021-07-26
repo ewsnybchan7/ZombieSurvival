@@ -177,6 +177,7 @@ public partial class ZombieEntity : BattleEntity
         gameObject.layer = LayerMask.NameToLayer("Dead");
 
         GameManager.Instance.Score += 10;
+        if(GameManager.Instance.Score % 100 == 0) 
         UIManager.UpdateScoretText();
 
         StartCoroutine(Death());
